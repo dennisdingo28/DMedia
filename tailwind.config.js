@@ -10,7 +10,15 @@ module.exports = {
       lg: '976px',
       xl: '1440px',
     },
-    extend: {},
+    fontFamily: {
+      'Noto':['Noto Sans','sans-serif'],
+      'Open':['Open Sans','sans-serif']
+    },
+    extend: {
+      colors:{
+        darkColor:"#141313"
+      }
+    },
   },
   plugins: [],
 }

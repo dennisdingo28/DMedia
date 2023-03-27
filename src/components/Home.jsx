@@ -1,9 +1,9 @@
 import React from 'react'
+import Logo from './Logo'
 
 const Home = () => {
   return (
-    <div>
-      home page
+    <div className=''>
     </div>
   )
 }
