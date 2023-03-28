@@ -16,7 +16,10 @@ module.exports = {
     },
     extend: {
       colors:{
-        darkColor:"#141313"
+        darkColor:"#141313",
+        darkPurple:"#3c06ba",
+        darkViolet:"#5a29cc",
+        darkBlue:"rgb(37,99,235)"
       }
     },
   },

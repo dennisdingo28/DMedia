@@ -4,7 +4,7 @@ const Logo = () => {
   return (
     <div className='logoWrapper'>
         
-        <div className='roundedBody relative bg-[#3c06ba] h-[4em] w-[4em] max-w-[64px] max-h-[64px] rounded-full'>
+        <div className='roundedBody relative bg-darkPurple h-[4em] w-[4em] max-w-[64px] max-h-[64px] rounded-full'>
             <div className='line w-[12px] h-[2.3px] bg-black absolute top-[10px] left-[13px]'>
 
             </div>
@@ -28,15 +28,15 @@ const Logo = () => {
                 <i className="bi bi-star"></i>
             </div>
 
-            <div className='absolute top-0 right-[5px] smallPlanet rounded-full w-[.9em] h-[.9em] bg-[#5a29cc]'>
+            <div className='absolute top-0 right-[5px] smallPlanet rounded-full w-[.9em] h-[.9em] bg-darkViolet'>
 
             </div>
 
-            <div className='absolute bottom-0 right-[-8px] smallPlanet rounded-full w-[.9em] h-[.9em] bg-blue-600'>
+            <div className='absolute bottom-0 right-[-8px] smallPlanet rounded-full w-[.9em] h-[.9em] bg-darkBlue'>
 
             </div>
 
-            <h1 className='font-Open font-bold text-center text-[18px] textLogo left-[50%] -translate-x-[50%] -bottom-[30px] absolute'>DMedia</h1>
+            <h1 className='font-Open font-bold text-center text-[18px] textLogo left-[50%] ml-1 -translate-x-[50%] -bottom-[30px] absolute'>DMedia</h1>
 
         </div>
         
