@@ -36,7 +36,7 @@ const Logo = () => {
 
             </div>
 
-            <h1 className='font-Open font-bold text-center text-[18px] textLogo left-[50%] ml-1 -translate-x-[50%] -bottom-[30px] absolute'>DMedia</h1>
+            <h1 className='font-Open font-bold text-center text-[18px] textLogo left-[50%] ml-1 -translate-x-[50%] -bottom-[30px] absolute text-white'>DMedia</h1>
 
         </div>
         
