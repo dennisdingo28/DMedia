@@ -53,15 +53,18 @@ const Authenticate = () => {
             handleAuthentication();
             const req = await axios.post("/auth/register",registerInputStates);
             setError(!req.data.good);
-            setForm(!req.data.good);
             setFormStatus(req.data.msg);
+            setTimeout(()=>{
+                setForm(!req.data.good);
+            },2500);
+            
             console.log(req);
           
         }catch(err){
             setError(true);
             setFormStatus("Cannot communicate with the server.Please try again later.");
             setTimeout(clearInput,2500);
-            setTimeout(()=>{setFormStatus("")},2500);
+            setTimeout(()=>{setFormStatus("")},2000);
         }
     }
     
@@ -70,9 +73,11 @@ const Authenticate = () => {
             handleAuthentication();
             const req = await axios.post('/auth/login',loginInputStates);
             setError(!req.data.good);
-            setForm(!req.data.good);
-            setFormStatus(req.data.msg);
-            
+            setFormStatus(req.data.msg); 
+            setTimeout(()=>{
+                setForm(!req.data.good);
+            },2500);
+            console.log(req);
         }catch(err){
             setError(true);
             setFormStatus("Cannot communicate with the server.Please try again later.");
@@ -110,7 +115,7 @@ const Authenticate = () => {
 
   return (
     <div className='authWrapper'>
-        <div className='authContainer bg-[#0b0b0b] min-h-screen text-white'>
+        <div className='authContainer bg-[#0e0e0e] min-h-screen text-white'>
 
             <div className='parent-container'>
                 {/*navbar*/}
@@ -133,7 +138,7 @@ const Authenticate = () => {
                                 <p className='font-Noto text-[.9em] font-thin'>Choose your authentication</p>
                             </div>
 
-                            <div className='authWrapper bg-[#0c0c0c]'>
+                            <div className='authWrapper bg-[#121212]'>
                                 <div>
                                     <div className='flex items-center justify-center gap-6 pt-2'>
                                         <p className={`${!form ? "text-gray-500":"text-white"} font-thin cursor-pointer relative after:content-[""] after:h-[1.6px] after:bg-darkBlue after:absolute after:bottom-[-3px] after:left-[50%] after:translate-x-[-50%] after:w-[0px] hover:after:w-[100%] after:duration-[.20s]`} onClick={()=>setForm(true)}>Register</p>
