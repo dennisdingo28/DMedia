@@ -1,8 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState,useRef } from 'react'
 import Logo from './Logo';
 import axios from "axios";
+import defaultProfile from "../imgs/defaultProfile.jpg";
 
 const Authenticate = () => {
+
+    const fileInput = useRef();
 
     const [showPassword,setShowPassword] = useState(false);
     const [form,setForm]=useState(true);  
@@ -14,7 +17,8 @@ const Authenticate = () => {
     const [registerInputStates,setRegisterInputs] = useState({
         username:"",
         email:"",
-        password:""
+        password:"",
+        profileUrl:""
     })
     const [loginInputStates,setLoginInputs] = useState({
         email:"",
@@ -108,6 +112,31 @@ const Authenticate = () => {
         }
     }
 
+    function handleProfile(){
+        fileInput.current.value="";
+        fileInput.current.click();
+    }
+
+    function handleFileInput(e){
+        const userImage = e.target.files[0];
+
+        console.log(userImage);
+
+        if(userImage){
+            const imageUrl = URL.createObjectURL(userImage);
+            console.log(imageUrl);
+            setRegisterInputs(prevState=>{
+                return {
+                    ...prevState,
+                    profileUrl:imageUrl
+                }
+            })
+            URL.revokeObjectURL(userImage);
+            console.log(registerInputStates);
+        }
+
+    }
+
   return (
     <div className='authWrapper'>
         <div className='authContainer bg-[#0b0b0b] min-h-screen text-white'>
@@ -173,10 +202,37 @@ const Authenticate = () => {
                                                     })} type={showPassword ? "text":"password"} placeholder='password' className='text-[.9em] bg-transparent outline-none border-b w-[100%]'/>
                                                         {showPassword ? <i onClick={()=>setShowPassword(false)} className="bi bi-eye cursor-pointer hover:bg-gray-800 duration-[.10s] px-1 rounded-full"></i>:<i onClick={()=>setShowPassword(true)} className="bi bi-eye-slash cursor-pointer hover:bg-gray-800 duration-[.10s] px-1 rounded-full"></i>}
                                                 </div>
+                                                <div className='profilePictureContainer'>
+                                                    <div className='profileContainer flex items-center justify-center'>
+                                                        <div className='relative'>
+                                                          
+                                                            <img className='w-[45px] h-[45px] rounded-full' src={registerInputStates.profileUrl || defaultProfile} alt="Profile"/>
+                                                            {registerInputStates.profileUrl!==defaultProfile && registerInputStates.profileUrl!=="" ? <i onClick={()=>setRegisterInputs(prevState=>{
+                                                                return {
+                                                                    ...prevState,
+                                                                    profileUrl:""
+                                                                }
+                                                            })} className="absolute -top-2 -right-1 cursor-pointer bi bi-x"></i>:""}
+                                                        </div>
+                                                        
+                                                    </div>
+                                                    <div>
+                                                        <div className='controllFileInputContainer'>
+                                                            <input onChange={handleFileInput} ref={fileInput} type={"file"} className="hidden"/>
+                                                        </div>
+                                                        <div className='fileInputContainer text-center mt-3 mb-1'>
+                                                            <button onClick={handleProfile} className='bg-darkPurple p-1 rounded-sm font-Noto text-[.80em] duration-150 active:scale-95 cursor-pointer hover:shadow-[0px_2px_5px_#3c06ba]'>Choose Profile Picture</button>
+                                                        </div>
+                                                        <div>
+                                                            <p className='fileName text-[.6em] text-center mt-1'>Filename</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                                 <div className='submitContainer text-center'>
                                                     <button onClick={validateInputs} className='bg-transparent border font-Noto rounded-sm text-[.92em] border-darkBlue px-2 py-1 hover:bg-darkBlue duration-[.25s]'>Create my account</button>
                                                     <p className={`formStatus text-[.8em] font-Open mt-3 ${error ? "text-red-700":"text-green-600"}`}>{formStatus}</p>
                                                 </div>
+                                                
                                             </div>
                                         </div> :
                                         <div className='loginContainer duration-150'>
