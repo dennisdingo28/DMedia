@@ -157,15 +157,18 @@ const Authenticate = () => {
 
                 {/*hero*/}
                 <div className='mt-10'>
-                    <h1 className='text-[2.2em] font-Open font-bold text-center'>Welcome <span className='text-darkViolet'>to</span> the most <span className='text-darkViolet'>modern</span> social media</h1>
+                    <div className='heroHeader text-center'>
+                        <h1 className='text-[2.2em] font-Open font-bold'>Welcome <span className='text-darkViolet'>to</span> the most <span className='text-darkViolet'>modern</span> social media</h1>
+                            <button className='mt-7 duration-200 hover:-translate-y-1 bg-transparent border-2 border-[#dfab0e] rounded-lg p-2 text-[#dfab0e] hover:shadow-[0px_0px_4px_#dfab0e]'>Explore Now</button>
+                    </div>
                 
-                    <div className='authenticationWrapper'>
+                    <div className='authenticationWrapper font-Karla font-medium mt-16'>
+                        <h2 className='font-bold text-[1.2em] mb-2'>Authenticate and <span className='text-darkViolet'>unlock</span> the power of DMedia</h2>
                         <div className='authenticationContainer'>
                             <div className='bg-[#070707] px-2 py-1 rounded-t-md'>
                                 <p className='font-Noto text-[.9em] font-thin'>Choose your authentication</p>
                             </div>
-
-                            <div className='authWrapper bg-[#0c0c0c]'>
+                            <div className='authWrapper bg-[#111111]'>
                                 <div>
                                     <div className='flex items-center justify-center gap-6 pt-2'>
                                         <p className={`${!form ? "text-gray-500":"text-white"} font-thin cursor-pointer relative after:content-[""] after:h-[1.6px] after:bg-darkBlue after:absolute after:bottom-[-3px] after:left-[50%] after:translate-x-[-50%] after:w-[0px] hover:after:w-[100%] after:duration-[.20s]`} onClick={()=>setForm(true)}>Register</p>

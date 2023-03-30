@@ -12,7 +12,8 @@ module.exports = {
     },
     fontFamily: {
       'Noto':['Noto Sans','sans-serif'],
-      'Open':['Open Sans','sans-serif']
+      'Open':['Open Sans','sans-serif'],
+      'Karla':['Karla', 'sans-serif']
     },
     extend: {
       colors:{
