@@ -21,12 +21,13 @@ const Authenticate = () => {
         username:"",
         email:"",
         password:"",
-        profileUrl:""
-    })
+        profileUrl:defaultProfile
+    });
+    console.log(registerInputStates);
     const [loginInputStates,setLoginInputs] = useState({
         email:"",
         password:""
-    })
+    });
 
     function checkEmpty(text){
         if(text.trim()==='')
@@ -38,12 +39,14 @@ const Authenticate = () => {
         setRegisterInputs({
             username:"",
             password:"",
-            email:""
+            email:"",
+            profileUrl:defaultProfile
         });
         setLoginInputs({
             email:"",
             password:""
         });
+        setFilename("");
     }
 
     function handleAuthentication(){
@@ -207,12 +210,15 @@ const Authenticate = () => {
                                                         <div className='relative'>
                                                           
                                                             <img className='w-[45px] h-[45px] rounded-full' src={registerInputStates.profileUrl || defaultProfile} alt="Profile"/>
-                                                            {registerInputStates.profileUrl!==defaultProfile && registerInputStates.profileUrl!=="" ? <i onClick={()=>setRegisterInputs(prevState=>{
+                                                            {registerInputStates.profileUrl!==defaultProfile ? <i onClick={()=>{
+                                                                setFilename("");
+                                                                setRegisterInputs(prevState=>{
                                                                 return {
                                                                     ...prevState,
-                                                                    profileUrl:""
+                                                                    profileUrl:defaultProfile
                                                                 }
-                                                            })} className="absolute -top-2 -right-1 cursor-pointer bi bi-x"></i>:""}
+                                                               
+                                                            })}} className="absolute -top-2 -right-1 cursor-pointer bi bi-x"></i>:""}
                                                         </div>
                                                         
                                                     </div>
