@@ -11,8 +11,11 @@ const Authenticate = () => {
     const [form,setForm]=useState(true);  
     const [formStatus,setFormStatus]=useState("");  
     const [error,setError]=useState(false);
+
     //true-register form;
     //false-login form;
+
+    const [filename,setFilename] = useState("");
 
     const [registerInputStates,setRegisterInputs] = useState({
         username:"",
@@ -120,11 +123,9 @@ const Authenticate = () => {
     function handleFileInput(e){
         const userImage = e.target.files[0];
 
-        console.log(userImage);
-
         if(userImage){
+            setFilename(userImage.name);
             const imageUrl = URL.createObjectURL(userImage);
-            console.log(imageUrl);
             setRegisterInputs(prevState=>{
                 return {
                     ...prevState,
@@ -132,7 +133,6 @@ const Authenticate = () => {
                 }
             })
             URL.revokeObjectURL(userImage);
-            console.log(registerInputStates);
         }
 
     }
@@ -218,13 +218,13 @@ const Authenticate = () => {
                                                     </div>
                                                     <div>
                                                         <div className='controllFileInputContainer'>
-                                                            <input onChange={handleFileInput} ref={fileInput} type={"file"} className="hidden"/>
+                                                            <input accept="image/png, image/jpeg, image/jpg" onChange={handleFileInput} ref={fileInput} type={"file"} className="hidden"/>
                                                         </div>
                                                         <div className='fileInputContainer text-center mt-3 mb-1'>
                                                             <button onClick={handleProfile} className='bg-darkPurple p-1 rounded-sm font-Noto text-[.80em] duration-150 active:scale-95 cursor-pointer hover:shadow-[0px_2px_5px_#3c06ba]'>Choose Profile Picture</button>
                                                         </div>
                                                         <div>
-                                                            <p className='fileName text-[.6em] text-center mt-1'>Filename</p>
+                                                            <p className='fileName text-[.6em] text-center mt-1'>{filename}</p>
                                                         </div>
                                                     </div>
                                                 </div>
