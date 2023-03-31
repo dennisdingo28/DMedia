@@ -6,7 +6,11 @@ import rocket from "../imgs/rocket.png";
 import planets from "../imgs/planets.png";
 import businessMan from "../imgs/business-man.png";
 
+import {useNavigate} from "react-router-dom";
+
 const Authenticate = () => {
+  const navigate = useNavigate();
+
   const fileInput = useRef();
 
   const [showPassword, setShowPassword] = useState(false);
@@ -14,6 +18,7 @@ const Authenticate = () => {
   const [formStatus, setFormStatus] = useState("");
   const [error, setError] = useState(false);
 
+  const [navbar,setNavbar] = useState(false);
   //true-register form;
   //false-login form;
 
@@ -88,6 +93,10 @@ const Authenticate = () => {
       setFormStatus(req.data.msg);
 
       localStorage.setItem('token',req.data.token);
+      setTimeout(()=>{
+        navigate('/');
+      },1500);
+
     } catch (err) {
       setError(true);
       setFormStatus(
@@ -153,6 +162,10 @@ const Authenticate = () => {
     }
   }
 
+
+  function toggleMenu(){
+    setNavbar(!navbar);
+  }
   return (
     <div className="authWrapper">
       <div className="authContainer bg-[#0b0b0b] min-h-screen text-white pb-10">
@@ -162,8 +175,11 @@ const Authenticate = () => {
             <div className="cursor-pointer">
               <Logo />
             </div>
-            <div className="moreContainer">
-              <i className="bi bi-chevron-down cursor-pointer"></i>
+            <div className="moreContainer relative">
+              <i onClick={toggleMenu} className={`bi bi-chevron-down cursor-pointer`}></i>
+              <div className={`absolute left-[50%] -translate-x-[50%] ${!navbar ? "hidden":"block"}`}>
+                <p className="text-white cursor-pointer">FAQ</p>
+              </div>
             </div>
           </div>
 
