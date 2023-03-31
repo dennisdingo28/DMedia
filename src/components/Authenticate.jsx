@@ -4,6 +4,7 @@ import axios from "axios";
 import defaultProfile from "../imgs/defaultProfile.jpg";
 import rocket from "../imgs/rocket.png";
 import planets from "../imgs/planets.png";
+import businessMan from "../imgs/business-man.png";
 
 const Authenticate = () => {
   const fileInput = useRef();
@@ -85,6 +86,8 @@ const Authenticate = () => {
       setError(!req.data.good);
       setForm(!req.data.good);
       setFormStatus(req.data.msg);
+
+      localStorage.setItem('token',req.data.token);
     } catch (err) {
       setError(true);
       setFormStatus(
@@ -171,20 +174,22 @@ const Authenticate = () => {
                 Welcome <span className="text-darkViolet">to</span> the most{" "}
                 <span className="text-darkViolet">modern</span> social media
               </h1>
-              <button className="mt-7 duration-200 hover:-translate-y-[5px] bg-transparent border-2 border-[#dfab0e] rounded-lg p-2 text-[#dfab0e] hover:shadow-[0px_0px_4px_#dfab0e]">
-                Explore Now
-              </button>
+              <a href="/">
+                <button className="mt-7 duration-200 hover:-translate-y-[5px] bg-transparent border-2 border-[#dfab0e] rounded-lg p-2 text-[#dfab0e] hover:shadow-[0px_0px_4px_#dfab0e]">
+                  Explore Now
+                </button>
+              </a>
             </div>
           </div>
 
           {/*page content*/}
-          <div className="authenticationWrapper">
-            <div className="authenticationContainer font-Karla       font-medium mt-20">
-              <h2 className="font-bold text-[1.2em] mb-3 max-w-[700px] mx-auto">
+          <div className="authenticationWrapper lg:flex lg:items-center lg:justify-between">
+            <div className="authenticationContainer font-Karla font-medium mt-32 w-[100%]">
+              <h2 className="font-bold text-[1.2em] mb-3 max-w-[800px] mx-auto lg:mx-0">
                 Authenticate and <span className="text-darkViolet">unlock</span>{" "}
                 the power of DMedia
               </h2>
-              <div className="authenticationContainer max-w-[700px] mx-auto">
+              <div className="authenticationContainer mx-auto lg:mx-0 max-w-[800px] w-[100%]">
                 <div className="bg-[#070707] px-2 py-1 rounded-t-md">
                   <p className="font-Noto text-[1em] font-thin">
                     Choose your authentication
@@ -432,8 +437,9 @@ const Authenticate = () => {
                 </div>
               </div>
             </div>
-            <div className="hidden">
-              <img src={rocket} alt="login rocket" />
+            <div className="hidden lg:block lg:w-[100%]">
+                  <img src={businessMan} className="max-w-[1200px] w-[100%] object-cover"/>
+                  <h2 className="uppercase font-Open font-bold text-center text-[1.3em]">GET INTO THE ACTION!</h2>
             </div>
           </div>
 
@@ -446,7 +452,7 @@ const Authenticate = () => {
             <div className="mt-2">
               <img
                 src={planets}
-                className=" mb-2 max-w-[450px] mx-auto object-cover w-[100%]"
+                className=" mb-2 max-w-[450px] mx-auto object-cover w-[100%] lg:hidden"
                 alt="planets"
               />
               <p className="font-Karla font-medium">
@@ -481,14 +487,14 @@ const Authenticate = () => {
                 What are you waiting for ?
               </h3>
               <div className="flex items-center flex-col sm:flex-row sm:justify-center">
-                <div>
-                <img src={rocket} alt="rocketImage" className="min-w-[200px] max-w-[200px]" />
+                <div className="flex-1">
+                <img src={rocket} alt="rocketImage" className="min-w-[200px] max-w-[200px] lg:max-w-[700px] lg:w-[100%]" />
                 </div>
                 
-                <div>
-                  <button className="mt-4 capitalize font-Noto bg-[#560792] px-2 py-3 hover:bg-[#480698] text-[1.1em]">
+                <div className="flex-1">
+                  <a href="/"><button className="mt-4 capitalize font-Noto bg-[#7302ca] px-2 py-3 hover:bg-[#480698] text-[1.1em]">
                     Start From Here
-                  </button>
+                  </button></a>
                 </div>
               </div>
             </div>

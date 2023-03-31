@@ -1,8 +1,8 @@
-import React from 'react'
 
+import React from 'react'
 const Logo = () => {
   return (
-    <div className='logoWrapper'>
+    <a href="/" className='logoWrapper'>
         
         <div className='roundedBody relative bg-darkPurple h-[4em] w-[4em] max-w-[64px] max-h-[64px] rounded-full'>
             <div className='line w-[12px] h-[2.3px] bg-black absolute top-[10px] left-[13px]'>
@@ -41,7 +41,7 @@ const Logo = () => {
         </div>
         
        
-    </div>
+    </a>
   )
 }
 
