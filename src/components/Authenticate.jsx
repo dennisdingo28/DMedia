@@ -167,7 +167,7 @@ const Authenticate = () => {
           {/*hero*/}
           <div className="mt-10">
             <div className="heroHeader text-center">
-              <h1 className="text-[2.2em] font-Open font-bold">
+              <h1 className="text-[1.5em] font-Open font-bold sm:text-[2em]">
                 Welcome <span className="text-darkViolet">to</span> the most{" "}
                 <span className="text-darkViolet">modern</span> social media
               </h1>
@@ -180,11 +180,11 @@ const Authenticate = () => {
           {/*page content*/}
           <div className="authenticationWrapper">
             <div className="authenticationContainer font-Karla       font-medium mt-20">
-              <h2 className="font-bold text-[1.2em] mb-2">
+              <h2 className="font-bold text-[1.2em] mb-3 max-w-[700px] mx-auto">
                 Authenticate and <span className="text-darkViolet">unlock</span>{" "}
                 the power of DMedia
               </h2>
-              <div className="authenticationContainer">
+              <div className="authenticationContainer max-w-[700px] mx-auto">
                 <div className="bg-[#070707] px-2 py-1 rounded-t-md">
                   <p className="font-Noto text-[1em] font-thin">
                     Choose your authentication
@@ -198,7 +198,9 @@ const Authenticate = () => {
                           !form ? "text-gray-500" : "text-white"
                         }  font-thin cursor-pointer relative after:content-[""] 
                                             text-[1.2em]
-                                            after:h-[1.6px] after:bg-darkBlue after:absolute after:bottom-[-3px] after:left-[50%] after:translate-x-[-50%] after:w-[0px] hover:after:w-[100%] after:duration-[.20s]`}
+                                            after:h-[1.6px] 
+                                            
+                                            after:bg-darkBlue after:absolute after:bottom-[-3px] after:left-[50%] after:translate-x-[-50%] after:w-[0px] hover:after:w-[100%] after:duration-[.20s]`}
                         onClick={() => setForm(true)}
                       >
                         Register
@@ -217,7 +219,7 @@ const Authenticate = () => {
                     <div className="authContainer p-3 relative">
                       {form ? (
                         <div className="registerContainer mt-3">
-                          <p className="text-center lowercase font-Open">
+                          <p className="text-center lowercase font-Open mb-3">
                             @ register
                           </p>
 
@@ -358,7 +360,7 @@ const Authenticate = () => {
                         </div>
                       ) : (
                         <div className="loginContainer duration-150">
-                          <p className="text-center mt-3 lowercase font-Open">
+                          <p className="text-center mt-3 mb-3 lowercase font-Open">
                             @ login
                           </p>
                           <div className="loginForm flex flex-col gap-6">
@@ -444,7 +446,7 @@ const Authenticate = () => {
             <div className="mt-2">
               <img
                 src={planets}
-                className=" mb-2 max-w-[100%] object-cover w-[100%]"
+                className=" mb-2 max-w-[450px] mx-auto object-cover w-[100%]"
                 alt="planets"
               />
               <p className="font-Karla font-medium">
@@ -474,14 +476,17 @@ const Authenticate = () => {
           </div>
 
           <div className="badgeWrapper mt-20">
-            <div className="badgeContainer bg-gradient-to-r from-[#7602CC] to-[#5000B1] flex flex-col justify-center items-center px-3 py-4 rounded-lg">
-              <h3 className="text-[2em] font-Open font-bold text-white">
+            <div className="badgeContainer bg-gradient-to-r from-[#7602CC] to-[#5000B1] px-3 py-4 rounded-lg sm:max-w-[500px] sm:mx-auto">
+              <h3 className="text-[1.3em] font-Open font-bold text-white text-center">
                 What are you waiting for ?
               </h3>
-              <div className="flex items-center">
-                <img src={rocket} alt="rocketImage" className="max-w-[200px]" />
+              <div className="flex items-center flex-col sm:flex-row sm:justify-center">
                 <div>
-                  <button className="mt-4 capitalize font-Noto bg-[#7401CA] px-2 py-3 hover:bg-[#480698] text-[1.1em]">
+                <img src={rocket} alt="rocketImage" className="min-w-[200px] max-w-[200px]" />
+                </div>
+                
+                <div>
+                  <button className="mt-4 capitalize font-Noto bg-[#560792] px-2 py-3 hover:bg-[#480698] text-[1.1em]">
                     Start From Here
                   </button>
                 </div>
