@@ -20,7 +20,8 @@ module.exports = {
         darkColor:"#141313",
         darkPurple:"#3c06ba",
         darkViolet:"#5a29cc",
-        darkBlue:"rgb(37,99,235)"
+        darkBlue:"rgb(37,99,235)",
+        dark:"#0b0b0b"
       }
     },
   },

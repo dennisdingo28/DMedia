@@ -169,7 +169,7 @@ const Authenticate = ({setToken}) => {
   }
   return (
     <div className="authWrapper">
-      <div className="authContainer bg-[#0b0b0b] min-h-screen text-white pb-10">
+      <div className="authContainer bg-dark min-h-screen text-white pb-10">
         <div className="parent-container">
           {/*navbar*/}
           <div className="navbarContainer py-4 flex items-center justify-between">

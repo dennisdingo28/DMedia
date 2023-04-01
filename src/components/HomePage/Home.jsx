@@ -7,7 +7,7 @@ const Home = (props) => {
   const {user,setUser,logged,setLogged} = props;
 
   return (
-    <div className=''>
+    <div className='bg-dark min-h-screen'>
       <Navbar user={user} setUser={setUser} logged={logged} setLogged={setLogged}/>
     </div>
   )

@@ -3,6 +3,29 @@
     margin: auto;
 }
 
+.line1{
+    background: #5a29cc;
+}
+.line3{
+    background: #5a29cc;
+}
+
+.line{
+    transition: all .4s;
+}
+.activeLine.line1{
+    transform: translateX(100%);
+    opacity: 0;
+}
+.activeLine.line2{
+    transform: translateX(-100%);
+    opacity: 0;
+}
+.activeLine.line3{
+    transform: translateX(100%);
+    opacity: 0;
+}
+
 @media (min-width:340px){
     .parent-container{
         max-width: 300px;
