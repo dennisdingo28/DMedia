@@ -10,11 +10,11 @@ const Navbar = (props) => {
   return (
     <div>
         <div className='navbarContainer'>
-          <div className='parent-container navbar py-4 flex text-white flex items-center justify-between'>
+          <div className='parent-container navbar py-4 text-white flex items-center justify-between lg:justify-start lg:gap-6'>
             <div>
               <Logo/>
             </div>
-            <div>
+            <div className='lg:flex-1'>
               {logged ? <Logged sideMenu={sideMenu} setSideMenu={setSideMenu} user={user}/>:<NotLogged/>}
             </div>
           </div>

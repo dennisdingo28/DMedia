@@ -3,8 +3,8 @@ import React from 'react'
 const Logged = ({user,sideMenu,setSideMenu}) => {
     console.log(sideMenu);
   return (
-    <div>
-        <div className='mobileMenu'>
+    <div className=''>
+        <div className='mobileMenu lg:hidden'>
             <div className='mobileMenuContainer'>
 
                 <div className='menuContainer relative'>
@@ -49,8 +49,32 @@ const Logged = ({user,sideMenu,setSideMenu}) => {
                         </div>
                     </div>
                    
-                
+            </div>
+        </div>
 
+        <div className='desktopMenu hidden lg:flex items-center gap-6'>
+            <div className='searchContainer flex items-center gap-2 w-[100%] flex-1 max-w-[500px]'>
+                <input type='text' className='searchUsers w-[100%] outline-none bg-transparent border-b-2' placeholder='@username'/>
+                <i className="bi bi-binoculars-fill cursor-pointer"></i>
+            </div>
+            <div className="contentContainer flex items-center justify-between flex-1 lg:gap-3 xl:gap-0">
+                
+                <div className='myFriends hover:bg-[#8e8d8d] w-[100%] rounded-md p-1 duration-100 cursor-pointer flex flex-col gap-1 items-center justify-center'>
+                    <i className="bi bi-people-fill"></i>
+                    <p className='capitalize whitespace-nowrap'>My Friends</p>
+                </div>
+                <div className='myPosts hover:bg-[#8e8d8d] w-[100%] rounded-md p-1 duration-100 cursor-pointer flex flex-col gap-1 items-center justify-center'>
+                    <i className="bi bi-card-image"></i>
+                    <p className='capitalize whitespace-nowrap'>My Posts</p>
+                </div>
+                <div className='restrictedUsers hover:bg-[#8e8d8d] w-[100%] rounded-md p-1 duration-100 cursor-pointer flex flex-col gap-1 items-center justify-center'>
+                    <i className="bi bi-person-fill-slash"></i>
+                    <p className='capitalize  whitespace-nowrap'>Restricted Users</p>
+                </div>
+                <div className='settings hover:bg-[#8e8d8d] w-[100%] rounded-md p-1 duration-100 cursor-pointer flex flex-col gap-1 items-center justify-center'>
+                    <i className="bi bi-sliders"></i>
+                    <p className='capitalize whitespace-nowrap'>Settings</p>
+                </div>
             </div>
         </div>
     </div>
