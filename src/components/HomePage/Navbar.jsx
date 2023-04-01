@@ -10,7 +10,7 @@ const Navbar = (props) => {
   return (
     <div>
         <div className='navbarContainer lg:bg-[#070707]'>
-          <div className='parent-container navbar text-white py-6 flex items-center justify-between lg:justify-start lg:gap-6'>
+          <div className='parent-container navbar text-white py-3 flex items-center justify-between lg:justify-start lg:gap-6'>
             <div className=''>
               <Logo/>
             </div>
