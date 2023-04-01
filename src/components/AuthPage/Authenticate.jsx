@@ -1,14 +1,14 @@
 import React, { useState, useRef } from "react";
-import Logo from "./Logo";
+import Logo from "../CommonComponents/Logo";
 import axios from "axios";
-import defaultProfile from "../imgs/defaultProfile.jpg";
-import rocket from "../imgs/rocket.png";
-import planets from "../imgs/planets.png";
-import businessMan from "../imgs/business-man.png";
+import defaultProfile from "../../imgs/defaultProfile.jpg";
+import rocket from "../../imgs/rocket.png";
+import planets from "../../imgs/planets.png";
+import businessMan from "../../imgs/business-man.png";
 
 import {useNavigate} from "react-router-dom";
 
-const Authenticate = () => {
+const Authenticate = ({setToken}) => {
   const navigate = useNavigate();
 
   const fileInput = useRef();
@@ -91,6 +91,7 @@ const Authenticate = () => {
       setError(!req.data.good);
       setForm(!req.data.good);
       setFormStatus(req.data.msg);
+      setToken(req.data.token);
 
       localStorage.setItem('token',req.data.token);
       setTimeout(()=>{
