@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react'
-import Logo from '../CommonComponents/Logo'
+import React from 'react'
 import Navbar from './Navbar';
 
 const Home = (props) => {
@@ -7,7 +6,7 @@ const Home = (props) => {
   const {user,setUser,logged,setLogged} = props;
 
   return (
-    <div className='bg-dark min-h-screen'>
+    <div className='bg-dark min-h-[100vh]'>
       <Navbar user={user} setUser={setUser} logged={logged} setLogged={setLogged}/>
     </div>
   )

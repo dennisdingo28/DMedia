@@ -2,7 +2,12 @@
     max-width: 200px;
     margin: auto;
 }
-
+body{
+    overflow-x: hidden;
+}
+.sideMenu::-webkit-scrollbar{
+    width: 0 !important;
+}
 .line1{
     background: #5a29cc;
 }

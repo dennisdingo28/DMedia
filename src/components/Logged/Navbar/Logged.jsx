@@ -1,7 +1,7 @@
 import React from 'react'
 
 const Logged = ({user,sideMenu,setSideMenu}) => {
-    console.log(sideMenu);
+
   return (
     <div className=''>
         <div className='mobileMenu lg:hidden'>
@@ -16,32 +16,35 @@ const Logged = ({user,sideMenu,setSideMenu}) => {
                   
                 </div>
                    
-                    <div className={`sideMenu p-2 pb-5 delay-200 fixed z-10 top-0 bottom-0 duration-150 ${sideMenu ? "right-[0px]":"-right-[100%]"} w-[100%] min-w-[150px] max-w-[200px] bg-[#070707]`}>
+                    <div className={`sideMenu p-2 pb-5 delay-200 absolute min-h-screen z-10 top-0 bottom-0 duration-150 ${sideMenu ? "right-[0px]":"-right-[100%]"} w-[100%] min-w-[150px] max-w-[200px] bg-[#070707] overflow-scroll overflow-x-hidden`}>
                         <div className='closeContainer flex items-center justify-end pb-2'>
                             
                             <i className='bi bi-x-lg cursor-pointer hover:text-gray-600' onClick={()=>setSideMenu(false)}></i>
                         </div>
-                        <div className='account'>
-                            <p className=''><span className='font-medium'>My account:</span> {user.username}</p>
+                        <div className='account flex flex-col justify-center items-center'>
+                            <div className='flex flex-col gap-1 cursor-pointer justify-center items-center'>
+                                <img src={user.profileUrl} className='w-[45px] h-[45px] rounded-full' alt='profile'/>
+                                <p className='font-Open'>{user.username}</p>
+                            </div>
                         </div>
-                        <div className='content text-[.9em] h-[100%] flex flex-col items-center justify-around'>
-                            <div className='myFriends hover:bg-gray-900 w-[100%] duration-100 cursor-pointer flex flex-col gap-1 items-center justify-center'>
+                        <div className='content text-[.9em] min-h-[100%] flex flex-col items-center justify-between'>
+                            <div className='myFriends flex-1 hover:bg-gray-900 w-[100%] duration-100 cursor-pointer flex flex-col gap-1 items-center justify-center'>
                                 <i className="bi bi-people-fill"></i>
                                 <p className='capitalize'>My Friends</p>
                             </div>
-                            <div className='myPosts hover:bg-gray-900 w-[100%] duration-100 cursor-pointer flex flex-col gap-1 items-center justify-center'>
+                            <div className='myPosts flex-1 hover:bg-gray-900 w-[100%] duration-100 cursor-pointer flex flex-col gap-1 items-center justify-center'>
                                 <i className="bi bi-card-image"></i>
                                 <p className='capitalize'>My Posts</p>
                             </div>
-                            <div className='restrictedUsers hover:bg-gray-900 w-[100%] duration-100 cursor-pointer flex flex-col gap-1 items-center justify-center'>
+                            <div className='restrictedUsers flex-1 hover:bg-gray-900 w-[100%] duration-100 cursor-pointer flex flex-col gap-1 items-center justify-center'>
                                 <i className="bi bi-person-fill-slash"></i>
                                 <p className='capitalize'>Restricted Users</p>
                             </div>
-                            <div className='settings  hover:bg-gray-900 w-[100%] duration-100 cursor-pointer flex flex-col gap-1 items-center justify-center'>
+                            <div className='settings flex-1 hover:bg-gray-900 w-[100%] duration-100 cursor-pointer flex flex-col gap-1 items-center justify-center'>
                                 <i className="bi bi-sliders"></i>
                                 <p className='capitalize'>Settings</p>
                             </div>
-                            <div className='searchUsers cursor-pointer flex flex-col gap-1 items-center justify-center'>
+                            <div className='searchUsers flex-1 cursor-pointer flex flex-col gap-1 items-center justify-center'>
                                 <i className="bi bi-binoculars-fill"></i>
                                 <p className='capitalize'>Search for users</p>
                                 <input type='text' className='w-[100%] max-w-[100%] bg-transparent outline-none border-b mt-2' placeholder='@username'/>
@@ -74,6 +77,12 @@ const Logged = ({user,sideMenu,setSideMenu}) => {
                 <div className='settings hover:bg-[#8e8d8d] w-[100%] rounded-md p-1 duration-100 cursor-pointer flex flex-col gap-1 items-center justify-center'>
                     <i className="bi bi-sliders"></i>
                     <p className='capitalize whitespace-nowrap'>Settings</p>
+                </div>
+                <div className='profile'>
+                    <div className='flex flex-col gap-1 justify-center items-center cursor-pointer'>
+                        <img src={user.profileUrl} className='w-[45px] h-[45px] rounded-full' alt='profile'/>
+                        <p>{user.username}</p>
+                    </div>
                 </div>
             </div>
         </div>

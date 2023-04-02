@@ -11,18 +11,17 @@ import {useNavigate} from "react-router-dom";
 const Authenticate = ({setToken}) => {
   const navigate = useNavigate();
 
-  const fileInput = useRef();
+  const imgUrl = useRef();
 
   const [showPassword, setShowPassword] = useState(false);
   const [form, setForm] = useState(true);
   const [formStatus, setFormStatus] = useState("");
   const [error, setError] = useState(false);
+  const [imgError,setImgError] = useState("");
 
   const [navbar,setNavbar] = useState(false);
   //true-register form;
   //false-login form;
-
-  const [filename, setFilename] = useState("");
 
   const [registerInputStates, setRegisterInputs] = useState({
     username: "",
@@ -52,7 +51,6 @@ const Authenticate = ({setToken}) => {
       email: "",
       password: "",
     });
-    setFilename("");
   }
 
   function handleAuthentication() {
@@ -142,31 +140,15 @@ const Authenticate = ({setToken}) => {
     }
   }
 
-  function handleProfile() {
-    fileInput.current.value = "";
-    fileInput.current.click();
-  }
-
-  function handleFileInput(e) {
-    const userImage = e.target.files[0];
-
-    if (userImage) {
-      setFilename(userImage.name);
-      const imageUrl = URL.createObjectURL(userImage);
-      setRegisterInputs((prevState) => {
-        return {
-          ...prevState,
-          profileUrl: imageUrl,
-        };
-      });
-      URL.revokeObjectURL(userImage);
-    }
-  }
-
 
   function toggleMenu(){
     setNavbar(!navbar);
   }
+
+  function handleImgUrlError(){
+    setImgError("Invalid URL");
+  }
+
   return (
     <div className="authWrapper">
       <div className="authContainer bg-dark min-h-screen text-white pb-10">
@@ -309,58 +291,21 @@ const Authenticate = ({setToken}) => {
                               )}
                             </div>
                             <div className="profilePictureContainer">
-                              <div className="profileContainer flex items-center justify-center">
-                                <div className="relative">
-                                  <img
-                                    className="w-[45px] h-[45px] rounded-full"
-                                    src={
-                                      registerInputStates.profileUrl ||
-                                      defaultProfile
-                                    }
-                                    alt="Profile"
-                                  />
-                                  {registerInputStates.profileUrl !==
-                                  defaultProfile ? (
-                                    <i
-                                      onClick={() => {
-                                        setFilename("");
-                                        setRegisterInputs((prevState) => {
-                                          return {
-                                            ...prevState,
-                                            profileUrl: defaultProfile,
-                                          };
-                                        });
-                                      }}
-                                      className="absolute -top-2 -right-1 cursor-pointer bi bi-x"
-                                    ></i>
-                                  ) : (
-                                    ""
-                                  )}
-                                </div>
+                              <div className="profileContainer flex items-center justify-center gap-2">
+                                  <input ref={imgUrl} type="text" className="imageUrl max-w-[350px] bg-transparent outline-none" placeholder="enter the url of the image"/>
+                                  <img src={registerInputStates.profileUrl} onError={handleImgUrlError} onLoad={()=>{setImgError("")}} className="w-[40px] h-[40px] rounded-full" alt="profile"/>
                               </div>
-                              <div>
-                                <div className="controllFileInputContainer">
-                                  <input
-                                    accept="image/png, image/jpeg, image/jpg"
-                                    onChange={handleFileInput}
-                                    ref={fileInput}
-                                    type={"file"}
-                                    className="hidden"
-                                  />
-                                </div>
-                                <div className="fileInputContainer text-center mt-3 mb-1">
-                                  <button
-                                    onClick={handleProfile}
-                                    className="bg-darkPurple p-1 rounded-sm font-Noto text-[.9em] duration-150 active:scale-95 cursor-pointer hover:shadow-[0px_2px_5px_#3c06ba]"
-                                  >
-                                    Choose Profile Picture
-                                  </button>
-                                </div>
-                                <div>
-                                  <p className="fileName text-[.6em] text-center mt-1">
-                                    {filename}
-                                  </p>
-                                </div>
+                              <div className="flex items-center justify-center gap-2">
+                                <button onClick={()=>{
+                                  console.log(imgUrl);
+                                  setRegisterInputs(prevState=>{
+                                    return {
+                                      ...prevState,
+                                      profileUrl:imgUrl.current.value.trim()==="" ? defaultProfile:imgUrl.current.value
+                                    }
+                                  })
+                                  }} className=" bg-darkPurple p-2 rounded-sm cursor-pointer hover:shadow-[0px_0px_5px_#3c06ba] active:scale-[.95] duration-100">Set Image</button>
+                                  <p className="text-[.9em]">{imgError}</p>
                               </div>
                             </div>
                             <div className="submitContainer text-center">
