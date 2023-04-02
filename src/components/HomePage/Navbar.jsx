@@ -9,8 +9,8 @@ const Navbar = (props) => {
   const [sideMenu,setSideMenu]=useState(false);
   return (
     <div>
-        <div className='navbarContainer lg:bg-[#070707]'>
-          <div className='parent-container navbar text-white py-3 flex items-center justify-between lg:justify-start lg:gap-6'>
+        <div className='navbarContainer lg:bg-[#131212]'>
+          <div className='parent-container navbar text-white py-1 flex items-center justify-between lg:justify-start lg:gap-6'>
             <div className=''>
               <Logo/>
             </div>

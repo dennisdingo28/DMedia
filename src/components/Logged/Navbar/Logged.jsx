@@ -1,6 +1,18 @@
-import React from 'react'
+import React, { useState } from 'react'
+import SearchedUser from '../../HomePage/SearchedUser'
 
 const Logged = ({user,sideMenu,setSideMenu}) => {
+
+    const [searchingUser,setSearchingUser] = useState(false);
+
+    async function handleSearchingUser(e){
+        try{
+            setSearchingUser(true);
+            const searchingValue = e.target.value;
+            console.log(searchingValue);
+        }catch(err){
+        }
+    }
 
   return (
     <div className=''>
@@ -56,25 +68,39 @@ const Logged = ({user,sideMenu,setSideMenu}) => {
         </div>
 
         <div className='desktopMenu hidden lg:flex items-center gap-6'>
-            <div className='searchContainer flex items-center gap-2 w-[100%] flex-1 max-w-[500px]'>
-                <input type='text' className='searchUsers w-[100%] outline-none bg-transparent border-b-2' placeholder='@username'/>
+            <div className='searchContainer flex items-center gap-2 w-[100%] flex-1 max-w-[500px] relative'>
+                <input type='text' onChange={handleSearchingUser} className='searchUsers w-[100%] outline-none bg-transparent border-b-2' placeholder='@username'/>
                 <i className="bi bi-binoculars-fill cursor-pointer"></i>
+                {searchingUser && 
+                    <div className='searchResultsWrapper absolute left-0 right-0 -bottom-[190px]'>
+                        <div className='searchResultsContainer bg-[#191919] rounded-t-md'>
+                            <div className='bg-black px-2 py-1'>
+                                <p className='font-medium'>Relative to your search:</p>
+                            </div>
+                            <div className='searchedUsersContainer h-[150px] overflow-scroll overflow-x-hidden px-2 py-1'>
+                                <SearchedUser/>
+                                
+                            </div>
+                        </div>
+                    </div>
+                }
+                
             </div>
             <div className="contentContainer flex items-center justify-between flex-1 lg:gap-3 xl:gap-0">
                 
-                <div className='myFriends hover:bg-[#8e8d8d] w-[100%] rounded-md p-1 duration-100 cursor-pointer flex flex-col gap-1 items-center justify-center'>
+                <div className='myFriends hover:bg-[#5c5b5b] w-[100%] rounded-md p-1 duration-100 cursor-pointer flex flex-col gap-1 items-center justify-center'>
                     <i className="bi bi-people-fill"></i>
                     <p className='capitalize whitespace-nowrap'>My Friends</p>
                 </div>
-                <div className='myPosts hover:bg-[#8e8d8d] w-[100%] rounded-md p-1 duration-100 cursor-pointer flex flex-col gap-1 items-center justify-center'>
+                <div className='myPosts hover:bg-[#5c5b5b] w-[100%] rounded-md p-1 duration-100 cursor-pointer flex flex-col gap-1 items-center justify-center'>
                     <i className="bi bi-card-image"></i>
                     <p className='capitalize whitespace-nowrap'>My Posts</p>
                 </div>
-                <div className='restrictedUsers hover:bg-[#8e8d8d] w-[100%] rounded-md p-1 duration-100 cursor-pointer flex flex-col gap-1 items-center justify-center'>
+                <div className='restrictedUsers hover:bg-[#5c5b5b] w-[100%] rounded-md p-1 duration-100 cursor-pointer flex flex-col gap-1 items-center justify-center'>
                     <i className="bi bi-person-fill-slash"></i>
                     <p className='capitalize  whitespace-nowrap'>Restricted Users</p>
                 </div>
-                <div className='settings hover:bg-[#8e8d8d] w-[100%] rounded-md p-1 duration-100 cursor-pointer flex flex-col gap-1 items-center justify-center'>
+                <div className='settings hover:bg-[#5c5b5b] w-[100%] rounded-md p-1 duration-100 cursor-pointer flex flex-col gap-1 items-center justify-center'>
                     <i className="bi bi-sliders"></i>
                     <p className='capitalize whitespace-nowrap'>Settings</p>
                 </div>
