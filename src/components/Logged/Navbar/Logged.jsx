@@ -106,7 +106,7 @@ const Logged = ({user,sideMenu,setSideMenu}) => {
                                     setSearchedUsers([]);
                                 }}></i>
                             </div>
-                            <div className='searchedUsersContainer flex flex-col gap-5 h-[150px] overflow-scroll overflow-x-hidden px-2 py-1'>
+                            <div className='searchedUsersContainer flex flex-col h-[150px] overflow-scroll overflow-x-hidden px-2 py-3'>
                                 {
                                     searchedUsers.length > 0 ?
                                     searchedUsers.map(user=>{
