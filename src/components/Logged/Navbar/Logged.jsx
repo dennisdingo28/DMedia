@@ -1,17 +1,38 @@
-import React, { useState } from 'react'
+import React, { useState,useRef } from 'react'
 import SearchedUser from '../../HomePage/SearchedUser'
+import axios from 'axios';
 
 const Logged = ({user,sideMenu,setSideMenu}) => {
 
     const [searchingUser,setSearchingUser] = useState(false);
 
-    async function handleSearchingUser(e){
+    const [searchedUsers,setSearchedUsers] = useState([]);
+
+    const [searchContainer,setSearchContainer] = useState("");
+
+    const searchInput = useRef();
+
+    async function handleSearchUser(){
         try{
+            //handle http request to the server
             setSearchingUser(true);
-            const searchingValue = e.target.value;
-            console.log(searchingValue);
+            setSearchContainer("Loading...");
+            const req = await axios.get(`/search/user/?username=${searchInput.current.value}`)
+            console.log(req);
+            if(req.data.length>0)
+                setSearchedUsers(req.data);
+            else{
+                setSearchedUsers([]);
+                setSearchContainer("No results :/")
+            }
         }catch(err){
+            console.log(err);
         }
+    }
+
+    function closeResultContainer(){
+        setSearchingUser(false);
+        setSearchedUsers([]);
     }
 
   return (
@@ -69,16 +90,31 @@ const Logged = ({user,sideMenu,setSideMenu}) => {
 
         <div className='desktopMenu hidden lg:flex items-center gap-6'>
             <div className='searchContainer flex items-center gap-2 w-[100%] flex-1 max-w-[500px] relative'>
-                <input type='text' onChange={handleSearchingUser} className='searchUsers w-[100%] outline-none bg-transparent border-b-2' placeholder='@username'/>
-                <i className="bi bi-binoculars-fill cursor-pointer"></i>
+                <input type='text' onChange={(e)=>{
+                    if(e.target.value===''){ 
+                        setSearchingUser(false);
+                        setSearchedUsers([])};
+                    }} ref={searchInput} className='searchUsers w-[100%] outline-none bg-transparent border-b-2' placeholder='@username'/>
+                <i className="bi bi-binoculars-fill cursor-pointer" onClick={handleSearchUser}></i>
                 {searchingUser && 
                     <div className='searchResultsWrapper absolute left-0 right-0 -bottom-[190px]'>
                         <div className='searchResultsContainer bg-[#191919] rounded-t-md'>
-                            <div className='bg-black px-2 py-1'>
+                            <div className='bg-black px-2 py-1 flex items-center justify-between'>
                                 <p className='font-medium'>Relative to your search:</p>
+                                <i className='bi bi-x cursor-pointer' onClick={()=>{
+                                    closeResultContainer();
+                                    setSearchedUsers([]);
+                                }}></i>
                             </div>
-                            <div className='searchedUsersContainer h-[150px] overflow-scroll overflow-x-hidden px-2 py-1'>
-                                <SearchedUser/>
+                            <div className='searchedUsersContainer flex flex-col gap-5 h-[150px] overflow-scroll overflow-x-hidden px-2 py-1'>
+                                {
+                                    searchedUsers.length > 0 ?
+                                    searchedUsers.map(user=>{
+                                        return <SearchedUser key={user._id} {...user}/>
+                                    })
+                                    :
+                                    <p className='text-center'>{searchContainer}</p>
+                                }
                                 
                             </div>
                         </div>

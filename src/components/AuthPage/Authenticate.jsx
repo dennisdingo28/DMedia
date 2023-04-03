@@ -29,7 +29,6 @@ const Authenticate = ({setToken}) => {
     password: "",
     profileUrl: defaultProfile,
   });
-  console.log(registerInputStates);
   const [loginInputStates, setLoginInputs] = useState({
     email: "",
     password: "",

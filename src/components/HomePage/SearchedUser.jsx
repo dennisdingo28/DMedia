@@ -1,9 +1,24 @@
 import React from 'react'
 
-const SearchedUser = () => {
+const SearchedUser = (props) => {
+  const {profileUrl,username} = props;
   return (
-    <div>
-      Searched User
+    <div className='profileWrapper'>
+      <div className='profileContainer flex items-center justify-between cursor-pointer'>
+
+        <div className='flex items-center gap-2 profileDescription'>
+          <div>
+            <img src={profileUrl} className='w-[45px] h-[45px] rounded-full'/>
+          </div>
+          <div>
+            <p>{username}</p>
+          </div>
+        </div>
+        <div className='profileOptions'>
+          <i className='bi bi-box-arrow-up-right text-[.8em]'></i>
+        </div>
+    
+      </div>
     </div>
   )
 }
