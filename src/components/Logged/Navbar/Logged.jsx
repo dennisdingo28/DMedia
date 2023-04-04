@@ -7,6 +7,7 @@ const Logged = ({user,sideMenu,setSideMenu}) => {
     const [searchingUser,setSearchingUser] = useState(false);
 
     const [searchedUsers,setSearchedUsers] = useState([]);
+    const [searchValue,setSearchValue] = useState("");
 
     const [searchContainer,setSearchContainer] = useState("");
 
@@ -33,6 +34,7 @@ const Logged = ({user,sideMenu,setSideMenu}) => {
     function closeResultContainer(){
         setSearchingUser(false);
         setSearchedUsers([]);
+        setSearchContainer("");
     }
 
   return (
@@ -80,11 +82,30 @@ const Logged = ({user,sideMenu,setSideMenu}) => {
                             <div className='searchUsers flex-1 cursor-pointer flex flex-col gap-1 items-center justify-center'>
                                 <i className="bi bi-binoculars-fill"></i>
                                 <p className='capitalize'>Search for users</p>
-                                <input type='text' className='w-[100%] max-w-[100%] bg-transparent outline-none border-b mt-2' placeholder='@username'/>
+                                <input value={searchValue} onChange={e=>{
+                                    setSearchValue(e.target.value);
+                                    if(e.target.value==='')
+                                        closeResultContainer();
+                                }} type='text' className='w-[100%] max-w-[100%] bg-transparent outline-none border-b mt-2' placeholder='Search by username'/>
+                                <button onClick={handleSearchUser} className="text-center bg-darkBlue px-3 py-2 mt-2 rounded-sm font-Open font-bold active:scale-[.95] duration-75 outline-none">Search User</button>
+                                {searchingUser &&
+                                    searchedUsers.length>0 ?
+                                        <div className='resultsWrapper'>
+                                        <div className='resultsContainer'>    
+                                            <p className='mt-3 font-medium text-[1em]'>Relative to your search: </p>
+                                            
+                                            <div className='resultsParent max-h-[400px] overflow-scroll overflow-x-hidden bg-[#1e1e1e] py-1 flex flex-col'>
+                                               {searchedUsers.map(user=>{
+                                                return <SearchedUser key={user._id} {...user}/>
+                                               })}
+                                            </div>
+                                        </div>        
+                                    </div>:                                <p>{searchContainer}</p>
+                                }
+                                
                             </div>
                         </div>
                     </div>
-                   
             </div>
         </div>
 
@@ -93,8 +114,11 @@ const Logged = ({user,sideMenu,setSideMenu}) => {
                 <input type='text' onChange={(e)=>{
                     if(e.target.value===''){ 
                         setSearchingUser(false);
-                        setSearchedUsers([])};
-                    }} ref={searchInput} className='searchUsers w-[100%] outline-none bg-transparent border-b-2' placeholder='@username'/>
+                        setSearchedUsers([])
+                    }else{
+                        setSearchValue(e.target.value);
+                    };
+                    }} value={searchValue} ref={searchInput} className='searchUsers w-[100%] outline-none bg-transparent border-b-2' placeholder='Search by username'/>
                 <i className="bi bi-binoculars-fill cursor-pointer" onClick={handleSearchUser}></i>
                 {searchingUser && 
                     <div className='searchResultsWrapper absolute left-0 right-0 -bottom-[190px]'>
@@ -115,7 +139,6 @@ const Logged = ({user,sideMenu,setSideMenu}) => {
                                     :
                                     <p className='text-center'>{searchContainer}</p>
                                 }
-                                
                             </div>
                         </div>
                     </div>
