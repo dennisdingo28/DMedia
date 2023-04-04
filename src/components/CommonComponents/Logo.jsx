@@ -2,7 +2,7 @@
 import React from 'react'
 const Logo = () => {
   return (
-    <a href="/" className='logoWrapper'>
+    <a href="/" className='logoWrapper flex flex-col'>
         
         <div className='roundedBody relative bg-darkPurple h-[4em] w-[4em] max-w-[64px] max-h-[64px] rounded-full'>
             <div className='line w-[12px] h-[2.3px] bg-black absolute top-[10px] left-[13px]'>
@@ -39,7 +39,7 @@ const Logo = () => {
 
         </div>
 
-       <h1 className='font-Open font-bold text-center text-[18px] textLogo'>DMedia</h1>
+       <h1 className='font-Open font-bold text-[18px] textLogo text-white'>DMedia</h1>
 
     </a>
   )
