@@ -91,9 +91,10 @@ const Authenticate = ({setToken}) => {
       setToken(req.data.token);
 
       localStorage.setItem('token',req.data.token);
-      setTimeout(()=>{
-        navigate('/');
-      },1500);
+      if(req.data.good)
+        setTimeout(()=>{
+          navigate('/');
+        },1500);
 
     } catch (err) {
       setError(true);

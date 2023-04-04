@@ -51,7 +51,7 @@ const Logged = ({user,sideMenu,setSideMenu}) => {
                   
                 </div>
                    
-                    <div className={`sideMenu p-2 pb-5 delay-200 absolute min-h-screen z-10 top-0 bottom-0 duration-150 ${sideMenu ? "right-[0px]":"-right-[100%]"} w-[100%] min-w-[150px] max-w-[200px] bg-[#070707] overflow-scroll overflow-x-hidden`}>
+                    <div className={`sideMenu p-2 pb-5 delay-200 absolute min-h-screen z-10 top-0 bottom-0 duration-150 ${sideMenu ? "right-[0px]":"-right-[100%]"} w-[100%] min-w-[150px] max-w-[250px] bg-[#070707] overflow-scroll overflow-x-hidden`}>
                         <div className='closeContainer flex items-center justify-end pb-2'>
                             
                             <i className='bi bi-x-lg cursor-pointer hover:text-gray-600' onClick={()=>setSideMenu(false)}></i>
@@ -94,7 +94,7 @@ const Logged = ({user,sideMenu,setSideMenu}) => {
                                 <button onClick={handleSearchUser} className="text-center bg-darkBlue px-3 py-2 mt-2 rounded-sm font-Open font-bold active:scale-[.95] duration-75 outline-none">Search User</button>
                                 {searchingUser &&
                                     searchedUsers.length>0 ?
-                                        <div className='resultsWrapper'>
+                                        <div className='resultsWrapper w-[100%]'>
                                         <div className='resultsContainer'>    
                                             <p className='mt-3 font-medium text-[1em]'>Relative to your search: </p>
                                             
