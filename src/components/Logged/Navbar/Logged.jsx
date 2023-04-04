@@ -63,19 +63,19 @@ const Logged = ({user,sideMenu,setSideMenu}) => {
                             </div>
                         </div>
                         <div className='content text-[.9em] min-h-[100%] flex flex-col items-center justify-between'>
-                            <div className='myFriends flex-1 hover:bg-gray-900 w-[100%] duration-100 cursor-pointer flex flex-col gap-1 items-center justify-center'>
+                            <div className='myFriends flex-1 hover:bg-[#5c5b5b] w-[100%] duration-100 cursor-pointer flex flex-col gap-1 items-center justify-center'>
                                 <i className="bi bi-people-fill"></i>
                                 <p className='capitalize'>My Friends</p>
                             </div>
-                            <div className='myPosts flex-1 hover:bg-gray-900 w-[100%] duration-100 cursor-pointer flex flex-col gap-1 items-center justify-center'>
+                            <div className='myPosts flex-1 hover:bg-[#5c5b5b] w-[100%] duration-100 cursor-pointer flex flex-col gap-1 items-center justify-center'>
                                 <i className="bi bi-card-image"></i>
                                 <p className='capitalize'>My Posts</p>
                             </div>
-                            <div className='restrictedUsers flex-1 hover:bg-gray-900 w-[100%] duration-100 cursor-pointer flex flex-col gap-1 items-center justify-center'>
+                            <div className='restrictedUsers flex-1 hover:bg-[#5c5b5b] w-[100%] duration-100 cursor-pointer flex flex-col gap-1 items-center justify-center'>
                                 <i className="bi bi-person-fill-slash"></i>
                                 <p className='capitalize'>Restricted Users</p>
                             </div>
-                            <div className='settings flex-1 hover:bg-gray-900 w-[100%] duration-100 cursor-pointer flex flex-col gap-1 items-center justify-center'>
+                            <div className='settings flex-1 hover:bg-[#5c5b5b] w-[100%] duration-100 cursor-pointer flex flex-col gap-1 items-center justify-center'>
                                 <i className="bi bi-sliders"></i>
                                 <p className='capitalize'>Settings</p>
                             </div>
@@ -83,9 +83,13 @@ const Logged = ({user,sideMenu,setSideMenu}) => {
                                 <i className="bi bi-binoculars-fill"></i>
                                 <p className='capitalize'>Search for users</p>
                                 <input value={searchValue} onChange={e=>{
-                                    setSearchValue(e.target.value);
-                                    if(e.target.value==='')
+                                    if(e.target.value===''){
+                                        setSearchedUsers([])
+                                        setSearchingUser(false);
                                         closeResultContainer();
+                                    }
+                                    setSearchValue(e.target.value);
+
                                 }} type='text' className='w-[100%] max-w-[100%] bg-transparent outline-none border-b mt-2' placeholder='Search by username'/>
                                 <button onClick={handleSearchUser} className="text-center bg-darkBlue px-3 py-2 mt-2 rounded-sm font-Open font-bold active:scale-[.95] duration-75 outline-none">Search User</button>
                                 {searchingUser &&
@@ -115,9 +119,8 @@ const Logged = ({user,sideMenu,setSideMenu}) => {
                     if(e.target.value===''){ 
                         setSearchingUser(false);
                         setSearchedUsers([])
-                    }else{
-                        setSearchValue(e.target.value);
-                    };
+                    }
+                    setSearchValue(e.target.value);
                     }} value={searchValue} ref={searchInput} className='searchUsers w-[100%] outline-none bg-transparent border-b-2' placeholder='Search by username'/>
                 <i className="bi bi-binoculars-fill cursor-pointer" onClick={handleSearchUser}></i>
                 {searchingUser && 
