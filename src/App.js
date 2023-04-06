@@ -40,7 +40,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Home user={user} setUser={setUser} logged={logged} setLogged={setLogged}/>}/>
+        <Route path="/" element={<Home user={user} setUser={setUser} logged={logged} setLogged={setLogged} token={token}/>}/>
         <Route path="/auth" element={<Authenticate setToken={setToken}/>}/>
         <Route path="*" element={<NotFoundPage/>}/>
       </Routes>

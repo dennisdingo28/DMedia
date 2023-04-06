@@ -17,7 +17,6 @@ const SearchedUser = (props) => {
         <div className='profileOptions'>
           <i className='bi bi-box-arrow-up-right text-[.8em]'></i>
         </div>
-    
       </div>
     </div>
   )
