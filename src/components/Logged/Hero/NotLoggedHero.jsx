@@ -3,8 +3,8 @@ import globe from "../../../imgs/travel.png";
 
 const NotLoggedHero = () => {
   return (
-    <div className=''>
-        <div className='parent-container'>
+    <div className='mt-4'>
+        <div className=''>
              <h1 className='font-semibold font-Karla capitalize mt-3 text-center text-[1.79em]'>Happy <span className='text-darkBlue'>to</span> See You <span className='text-darkBlue'>You</span> Here</h1>
              <div className='md:flex md:flex-row-reverse md:items-center md:justify-between lg:justify-evenly'>
                 <div className='imageContainer'>

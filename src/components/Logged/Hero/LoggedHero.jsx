@@ -59,7 +59,7 @@ const LoggedHero = (props) => {
 
   return (
     <div className='mt-8'>
-        <div className='parent-container md:flex md:justify-around md:gap-10 md:items-center'>
+        <div className='md:flex md:justify-around md:gap-10 md:items-center'>
             <div className='postContainer'>
                 <div className='postTestmonial'>
                     <h1 className='font-medium font-Karla text-[1.3em] capitalize mb-3'>Let <span className='text-darkBlue'>People</span> Know That <span className='text-darkBlue'>You</span> Are Here</h1>
