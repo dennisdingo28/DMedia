@@ -68,7 +68,7 @@ const Hero = (props) => {
                 <div className='createPostContainer'>
                     <div className='postHeader flex items-center gap-2'>
                         <div className=''>
-                            <img src={user.profileUrl} className='cursor-pointer object-cover w-[50px] h-[45px] rounded-full'/>
+                            <img alt='profile' src={user.profileUrl} className='cursor-pointer object-cover w-[50px] h-[45px] rounded-full'/>
                         </div>
                         <div className='w-[100%] flex items-center'>
                             <input onChange={(e)=>{setPostTitle(e.target.value)
@@ -78,9 +78,15 @@ const Hero = (props) => {
                     </div>
                     <p>{formStatus}</p>
                     <div className='postBody mt-2 rounded-sm'>
-                        <div onClick={()=>setOpenFileSettings(!openFileSettings)} className='flex items-center justify-between cursor-pointer bg-[#1d1b1b] p-2'>
+                        <div onClick={()=>setOpenFileSettings(!openFileSettings)} className='flex items-center justify-between cursor-pointer bg-[#1d1b1b] p-2 relative'>
                             <p className='font-semibold text-[.9em]'>File Image</p>
                             <i className="bi bi-chevron-expand"></i>
+
+                            <div className={`absolute top-10 ${openFileSettings ? "hidden":"block left-[50%] -translate-x-[50%]"}`}>
+                                <img src={postImage} alt='post' className='max-w-[500px] w-[100%] max-h-[500px] min-w-[350px] min-h-[350px] h-[100%] object-cover'/>
+                                <h1 className='font-bold text-[1.5em] font-Noto max-w-[380px] text-center`'>Share your image</h1>
+
+                            </div>
                         </div>
                         
                         <div className={`imageOptionsContainer bg-[#131313] p-2 duration-150 ${openFileSettings ? "opacity-100":"opacity-0"}`}>
@@ -118,7 +124,7 @@ const Hero = (props) => {
                                         setFileStatus("Image url is not valid");
                                     }} onLoad={()=>{setValidImage(true)
                                         setFileStatus("")
-                                    }} src={imageSrc} className='max-w-[600px] max-h-[600px] object-cover w-[100%] h-[100%]'/>
+                                    }} alt='selected img' src={imageSrc} className='max-w-[500px] max-h-[500px] object-cover w-[100%] h-[100%]'/>
                                 </div>
                                 <div className='flex items-center flex-col justify-center'>
                                     <button onClick={()=>{
@@ -135,7 +141,7 @@ const Hero = (props) => {
             </div>
             <div className='hidden md:block'>
                 <h1 className='font-bold text-[1.5em] font-Noto max-w-[380px]'>Start Your Day By Saying Hello To The Others</h1>
-                <img src={rocketMan} className='max-w-[500px] w-[100%] max-h-[500px] min-w-[350px] min-h-[350px] h-[100%] object-cover'/>
+                <img src={rocketMan} className='max-w-[500px] w-[100%] max-h-[500px] min-w-[350px] min-h-[350px] h-[100%] object-cover' alt='rocket'/>
             </div>
         </div>
     </div>
