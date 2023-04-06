@@ -1,5 +1,7 @@
 import React,{useState} from 'react';
 import defaultProfile from "../../imgs/defaultProfile.jpg";
+import rocketMan from "../../imgs/man-rocket.png";
+import postImage from "../../imgs/postImage.png";
 import axios from "axios";
 
 const Hero = (props) => {
@@ -57,7 +59,7 @@ const Hero = (props) => {
 
   return (
     <div className='mt-8'>
-        <div className='parent-container'>
+        <div className='parent-container md:flex md:justify-around md:gap-10 md:items-center'>
             <div className='postContainer'>
                 <div className='postTestmonial'>
                     <h1 className='font-medium font-Karla text-[1.2em] capitalize mb-3'>Let <span className='text-darkBlue'>People</span> Know That <span className='text-darkBlue'>You</span> Are Here</h1>
@@ -80,7 +82,8 @@ const Hero = (props) => {
                             <p className='font-semibold text-[.9em]'>File Image</p>
                             <i className="bi bi-chevron-expand"></i>
                         </div>
-                        <div className={`imageOptionsContainer bg-[#131313] p-2 duration-150 ${openFileSettings ? "opacity-100 z-10":"opacity-0 -z-10"}`}>
+                        
+                        <div className={`imageOptionsContainer bg-[#131313] p-2 duration-150 ${openFileSettings ? "opacity-100":"opacity-0"}`}>
                             <div className='imgProps flex items-center justify-between gap-5 mt-2'>
                                 <div className='imgUrl flex items-center'>
                                     <div className='bg-[#161616] w-[40px] h-[40px] rounded-tl-md rounded-bl-md flex items-center justify-center'>
@@ -125,9 +128,14 @@ const Hero = (props) => {
                                 </div>
                            </div>
                         </div>
+                       
                     </div>
                 </div>
 
+            </div>
+            <div className='hidden md:block'>
+                <h1 className='font-bold text-[1.5em] font-Noto max-w-[380px]'>Start Your Day By Saying Hello To The Others</h1>
+                <img src={rocketMan} className='max-w-[500px] w-[100%] max-h-[500px] min-w-[350px] min-h-[350px] h-[100%] object-cover'/>
             </div>
         </div>
     </div>
