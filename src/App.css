@@ -8,6 +8,9 @@
 .searchedUsersContainer::-webkit-scrollbar{
     width: 0 !important;
 }   
+body::-webkit-scrollbar{
+    width: 0 !important;
+}
 body{
     overflow-x: hidden;
 }
