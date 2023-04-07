@@ -15,6 +15,7 @@ const LoggedHero = (props) => {
     const [openFileSettings,setOpenFileSettings] = useState(false);
 
     const [postTitle,setPostTitle] = useState("");
+    const [postDescription,setPostDescription] = useState("");
 
     const [imageSettings,setImageSettings] = useState({
         imageUrl:"",
@@ -39,13 +40,15 @@ const LoggedHero = (props) => {
     async function createPost(){
         const postData = {
             ...imageSettings,
-            title:postTitle
+            title:postTitle,
+            description:postDescription
         }
         const req = await axios.post("/create/post",postData,{
             headers:{
                 authorization:`Bearer ${token}`
             }
         });
+        setFormStatus("Post was successfully created!");
         console.log(req);
     }
 
@@ -55,6 +58,8 @@ const LoggedHero = (props) => {
         setFormStatus("");
         setImageSettings({imageUrl:"",imageAlt:""});
         setImageSrc(defaultProfile);
+        setPostDescription("");
+        window.location.reload();
     }
 
   return (
@@ -76,10 +81,10 @@ const LoggedHero = (props) => {
                             <i onClick={validateInputs} className="bi bi-plus-circle-fill cursor-pointer text-[#9ca3af] duration-100 hover:text-[#83878c]"></i>
                         </div>
                     </div>
-                    <p>{formStatus}</p>
+                    <p className='font-medium font-Noto'>{formStatus}</p>
                     <div className='postBody mt-2 rounded-sm'>
                         <div onClick={()=>setOpenFileSettings(!openFileSettings)} className='flex items-center justify-between cursor-pointer bg-[#1d1b1b] p-2 relative'>
-                            <p className='font-semibold text-[.9em]'>File Image</p>
+                            <p className='font-semibold text-[.9em]'>Manage your post</p>
                             <i className="bi bi-chevron-expand"></i>
 
                             <div className={`absolute top-10 ${openFileSettings ? "hidden":"block left-[50%] -translate-x-[50%]"}`}>
@@ -124,6 +129,11 @@ const LoggedHero = (props) => {
                                     }} onLoad={()=>{setValidImage(true)
                                         setFileStatus("")
                                     }} alt='selected img' src={imageSrc} className='max-w-[500px] max-h-[500px] object-cover w-[100%] h-[100%]'/>
+                                </div>
+                                <div>
+                                    <textarea onChange={(e)=>{setPostDescription(e.target.value)}} value={postDescription} className='w-[100%] h-[150px] bg-transparent outline-none border-x px-2 font-Open font-[1.1em] resize-none' placeholder='your description here'>
+
+                                    </textarea>
                                 </div>
                                 <div className='flex items-center flex-col justify-center'>
                                     <button onClick={()=>{

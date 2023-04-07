@@ -1,15 +1,20 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import LoggedHero from '../Logged/Hero/LoggedHero';
 import NotLoggedHero from '../Logged/Hero/NotLoggedHero';
 import axios from "axios";
+import Post from '../CommonComponents/Post';
 
 const Hero = (props) => {
     const {logged} = props;
     
+    const [allPosts,setAllPosts] = useState([]);
+
     async function getAllPosts(){
         try{        
             const req = await axios.get('/search/allPosts');
             console.log(req);
+            if(req.data.length>0)
+            setAllPosts(req.data)
         }catch(err){
             console.log(err);
         }
@@ -19,19 +24,29 @@ const Hero = (props) => {
         getAllPosts();
     },[]);
 
-
     return (
         <div>
             <div className='parent-container'>
                 {logged ? <LoggedHero {...props}/>:<NotLoggedHero/>}
                 
-                <div className='postContainer'>
+                <div className='postContainer mt-3'>
                     <div className='postHeader'>
-                    <h1 className='font-medium font-Karla text-[1.3em] capitalize mb-3'>Explore from<span className='text-darkBlue'> Here</span></h1>
+                        <h1 className='font-medium font-Karla text-[1.3em] capitalize mb-3'>Explore from<span className='text-darkBlue'> Here</span></h1>
+                    </div>
+                    <div className='postBody'>
+                        <div className='postsContainer flex flex-col gap-10'>
+                            {
+                                allPosts.length!==0 ? allPosts.map(post=>{
+                                    return <Post key={post._id} {...post} logged={logged}/>
+                                })
+                                :
+                                <p>Loading...</p>
+                            }
+                        </div>
+                    
                     </div>
                 </div>
             </div>
-            
         </div>
     )
 }
