@@ -12,10 +12,8 @@ const Post = (props) => {
 
   const [postUser,setPostUser] = useState({});
 
-  const [postLikesDislikes,setPostLikesDislikes] = useState({
-    likes:Number(likes),
-    dislikes:Number(dislikes)
-  })
+  const [nrLikes,setNrLikes]=useState(Number(likes));
+  const [nrDislikes,setNrDislikes]=useState(Number(dislikes));
 
   useEffect(()=>{
     decodeUserPost();
@@ -32,20 +30,7 @@ const Post = (props) => {
     }
   }
 
-  async function handleLikeDislike(){
-    try{
-      console.log(postLikesDislikes);
-      const id=_id;
-      const req = await axios.patch(`/post/updatePost/${id}`,postLikesDislikes,{
-        headers:{
-          authorization:`Bearer ${token}`
-        }
-      });
-      console.log(req);
-    }catch(err){
-      console.log(err);
-    }
-  }
+  
 
   return (
     <div>
@@ -80,37 +65,27 @@ const Post = (props) => {
                   {
                     return {...prevState,starUp:!prevState.starUp,dislike:false}
                   })
-                  setPostLikesDislikes(prevState=>{
-                    console.log(prevState);
-                    return {
-                      ...prevState,
-                      likes:Number(prevState.likes)+1
-                    }
-                  })
-                  handleLikeDislike();
+                    //onclick code
+                    if(postActioners.starUp){
+                      
+                    } 
                   }
 
                   }className='starUpContainer cursor-pointer duration-100 hover:shadow-[0px_0px_5px_#5a29cc] py-1 flex-1 flex flex-col gap-1 items-center active:scale-[.90]'>
                     {!postActioners.starUp ? <i className="bi bi-star"></i>:<i className="bi bi-star-fill text-yellow-500"></i>}
                     <p>{!postActioners.starUp ? "star up":"starred up"}</p>
-                    <small>{postLikesDislikes.likes}</small>
+                    <small>{nrLikes}</small>
                   </div>
 
                   <div onClick={()=>{
                     setPostActioners(prevState=>{
                     return {...prevState,dislike:!prevState.dislike,starUp:false}
                     })
-                    setPostLikesDislikes(prevState=>{
-                      return {
-                        ...prevState,
-                        dislikes:Number(prevState.dislikes)+1
-                      }
-                    })
-                    handleLikeDislike();
+                
                   }} className='dislikeContainer cursor-pointer duration-100 hover:shadow-[0px_0px_5px_#5a29cc] py-1 flex-1 flex flex-col gap-1 items-center active:scale-[.90]'>
                     {!postActioners.dislike ? <i className="bi bi-hand-thumbs-down"></i>:<i className="bi bi-hand-thumbs-down-fill text-blue-700"></i>}
                     <p>{!postActioners.dislike?"dislike":"disliked"}</p>
-                    <small>{postLikesDislikes.dislikes}</small>
+                    <small>{nrDislikes}</small>
 
                   </div>
 
