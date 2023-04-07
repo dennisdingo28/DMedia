@@ -2,32 +2,50 @@ import React, { useEffect, useState } from 'react'
 import axios from "axios";
 
 const Post = (props) => {
-  const {imageUrl,imageAlt,createdBy,user,title,description,logged,likes,dislikes} = props;
-  const [userProfile,setUserProfile] = useState({});
-
+  const {token,imageUrl,imageAlt,createdBy,user,title,description,logged,likes,dislikes,_id} = props;
   const [postActioners,setPostActioners] = useState({
     starUp:false,
     dislike:false,
     share:false,
     reported:false
   })
-  console.log(postActioners.starUp);
+
+  const [postUser,setPostUser] = useState({});
+
+  const [postLikesDislikes,setPostLikesDislikes] = useState({
+    likes:Number(likes),
+    dislikes:Number(dislikes)
+  })
 
   useEffect(()=>{
-    decodePostUser();
+    decodeUserPost();
   },[]);
 
-  async function decodePostUser(){
+  async function decodeUserPost(){
     try{
-      const req = await axios.get(`/search/userId/${createdBy}`);
-      console.log(req);
-      setUserProfile(req.data);
+        const userId = createdBy;
+        const req = await axios.get(`/search/userId/${userId}`);
+        console.log(req);
+        setPostUser(req.data);
     }catch(err){
       console.log(err);
     }
   }
 
-  
+  async function handleLikeDislike(){
+    try{
+      console.log(postLikesDislikes);
+      const id=_id;
+      const req = await axios.patch(`/post/updatePost/${id}`,postLikesDislikes,{
+        headers:{
+          authorization:`Bearer ${token}`
+        }
+      });
+      console.log(req);
+    }catch(err){
+      console.log(err);
+    }
+  }
 
   return (
     <div>
@@ -35,9 +53,9 @@ const Post = (props) => {
         <div className='pHeader'>
           <div className='flex items-center justify-between'>
             <div className='flex items-center gap-2 cursor-pointer'>
-              <img src={userProfile.profileUrl} className='w-[50px] h-[50px] rounded-full object-cover' alt='profile'/>
-              <p>{userProfile.username===user.username ? userProfile.username:userProfile.username}</p>
-             {userProfile.username===user.username && <span className='text-gray-400'>(you)</span>}
+              <img src={postUser.profileUrl} className='w-[50px] h-[50px] rounded-full object-cover' alt='profile'/>
+              <p>{postUser.username}</p>
+             {user._id===createdBy && <span className='text-gray-400'>(you)</span>}
             </div>
             <div>
               <i className="bi bi-three-dots cursor-pointer"></i>
@@ -57,27 +75,49 @@ const Post = (props) => {
               </div>
               {logged && <div className='flex items-center font-Open font-semibold'>
 
-                  <div onClick={()=>setPostActioners(prevState=>{
+                  <div onClick={()=>{
+                  setPostActioners(prevState=>
+                  {
                     return {...prevState,starUp:!prevState.starUp,dislike:false}
-                  })} className='starUpContainer cursor-pointer duration-100 hover:shadow-[0px_0px_5px_#5a29cc] py-1 flex-1 flex flex-col gap-1 items-center active:scale-[.90]'>
+                  })
+                  setPostLikesDislikes(prevState=>{
+                    console.log(prevState);
+                    return {
+                      ...prevState,
+                      likes:Number(prevState.likes)+1
+                    }
+                  })
+                  handleLikeDislike();
+                  }
+
+                  }className='starUpContainer cursor-pointer duration-100 hover:shadow-[0px_0px_5px_#5a29cc] py-1 flex-1 flex flex-col gap-1 items-center active:scale-[.90]'>
                     {!postActioners.starUp ? <i className="bi bi-star"></i>:<i className="bi bi-star-fill text-yellow-500"></i>}
                     <p>{!postActioners.starUp ? "star up":"starred up"}</p>
-                    <small>{likes}</small>
+                    <small>{postLikesDislikes.likes}</small>
                   </div>
 
-                  <div onClick={()=>setPostActioners(prevState=>{
+                  <div onClick={()=>{
+                    setPostActioners(prevState=>{
                     return {...prevState,dislike:!prevState.dislike,starUp:false}
-                  })} className='dislikeContainer cursor-pointer duration-100 hover:shadow-[0px_0px_5px_#5a29cc] py-1 flex-1 flex flex-col gap-1 items-center active:scale-[.90]'>
+                    })
+                    setPostLikesDislikes(prevState=>{
+                      return {
+                        ...prevState,
+                        dislikes:Number(prevState.dislikes)+1
+                      }
+                    })
+                    handleLikeDislike();
+                  }} className='dislikeContainer cursor-pointer duration-100 hover:shadow-[0px_0px_5px_#5a29cc] py-1 flex-1 flex flex-col gap-1 items-center active:scale-[.90]'>
                     {!postActioners.dislike ? <i className="bi bi-hand-thumbs-down"></i>:<i className="bi bi-hand-thumbs-down-fill text-blue-700"></i>}
                     <p>{!postActioners.dislike?"dislike":"disliked"}</p>
-                    <small>{dislikes}</small>
+                    <small>{postLikesDislikes.dislikes}</small>
 
                   </div>
 
                   <div onClick={()=>setPostActioners(prevState=>{
                     return {...prevState,share:!prevState.share}
                   })} className='shareContainer cursor-pointer duration-100 hover:shadow-[0px_0px_5px_#5a29cc] py-1 flex-1 flex flex-col gap-1 items-center active:scale-[.90]'>
-                    {!postActioners.share ? <i className="bi bi-globe"></i>:<i class="bi bi-share-fill text-green-700"></i>}
+                    {!postActioners.share ? <i className="bi bi-globe"></i>:<i className="bi bi-share-fill text-green-700"></i>}
                     <p>{!postActioners.share ? "share":"shared"}</p>
                   </div>
 
