@@ -43,7 +43,7 @@ const LoggedHero = (props) => {
             title:postTitle,
             description:postDescription
         }
-        const req = await axios.post("/create/post",postData,{
+        const req = await axios.post("/post/create",postData,{
             headers:{
                 authorization:`Bearer ${token}`
             }
