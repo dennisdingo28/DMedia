@@ -13,7 +13,7 @@ const Hero = (props) => {
         try{        
             const req = await axios.get('/search/allPosts');
             if(req.data.length>0)
-            setAllPosts(req.data)
+                setAllPosts(req.data)
         }catch(err){
             console.log(err);
         }
