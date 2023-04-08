@@ -128,14 +128,12 @@ const Post = (props) => {
                         else{
                           return {...prev,dislikes:prev.dislikes-1};
                         }
-                      },handleLikeDislike)
+                      })
 
                     setPostActioners(prevState=>{
                     return {...prevState,dislike:!prevState.dislike,starUp:false}
                     })
                     setClicked(true);
-
-                
                   }} className='dislikeContainer cursor-pointer duration-100 hover:shadow-[0px_0px_5px_#5a29cc] py-1 flex-1 flex flex-col gap-1 items-center active:scale-[.90]'>
                     {!postActioners.dislike ? <i className="bi bi-hand-thumbs-down"></i>:<i className="bi bi-hand-thumbs-down-fill text-blue-700"></i>}
                     <p>{!postActioners.dislike?"dislike":"disliked"}</p>
