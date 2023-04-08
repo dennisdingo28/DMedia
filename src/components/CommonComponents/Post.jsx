@@ -9,7 +9,7 @@ const Post = (props) => {
     share:false,
     reported:false
   })
-  const [clicked,setClicked] = useState(false);
+  const [clicked,setClicked] = useState(false);//handle side effect when click the like and dislike
   const [postUser,setPostUser] = useState({});
 
   const [postLikesDislikes,setPostLikesDislikes] = useState({});
