@@ -25,6 +25,7 @@ const Post = (props) => {
     try{
         const userId = createdBy;
         const req = await axios.get(`/search/userId/${userId}`);
+        console.log(req.data);
         setPostUser(req.data);
     }catch(err){
       console.log(err);
