@@ -9,7 +9,7 @@ const Post = (props) => {
     share:false,
     reported:false
   })
-
+  const [clicked,setClicked] = useState(false);
   const [postUser,setPostUser] = useState({});
 
   const [postLikesDislikes,setPostLikesDislikes] = useState({});
@@ -20,6 +20,11 @@ const Post = (props) => {
     getCurrentPost();
     console.log('rqe');
   },[]);
+
+  useEffect(()=>{
+    if(clicked)
+      handleLikeDislike();
+  },[postLikesDislikes])
 
   async function decodeUserPost(){
     try{
@@ -46,9 +51,14 @@ const Post = (props) => {
 
   async function handleLikeDislike(){
     try{
-
+      const id = _id;
+      const req = await axios.patch(`/post/updatePost/${id}`,postLikesDislikes,{
+        headers:{
+          Authorization:`Bearer ${token}`
+        }
+      })
+      console.log(req);
     }catch(err){
-
     }
   }
 
@@ -97,8 +107,7 @@ const Post = (props) => {
                   {
                     return {...prevState,starUp:!prevState.starUp,dislike:false}
                   })
-                 
-                    
+                  setClicked(true);
                   }
 
                   }className='starUpContainer cursor-pointer duration-100 hover:shadow-[0px_0px_5px_#5a29cc] py-1 flex-1 flex flex-col gap-1 items-center active:scale-[.90]'>
@@ -119,12 +128,13 @@ const Post = (props) => {
                         else{
                           return {...prev,dislikes:prev.dislikes-1};
                         }
-                      })
+                      },handleLikeDislike)
 
                     setPostActioners(prevState=>{
                     return {...prevState,dislike:!prevState.dislike,starUp:false}
                     })
-                  
+                    setClicked(true);
+
                 
                   }} className='dislikeContainer cursor-pointer duration-100 hover:shadow-[0px_0px_5px_#5a29cc] py-1 flex-1 flex flex-col gap-1 items-center active:scale-[.90]'>
                     {!postActioners.dislike ? <i className="bi bi-hand-thumbs-down"></i>:<i className="bi bi-hand-thumbs-down-fill text-blue-700"></i>}
