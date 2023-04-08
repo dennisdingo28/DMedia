@@ -12,7 +12,6 @@ const Hero = (props) => {
     async function getAllPosts(){
         try{        
             const req = await axios.get('/search/allPosts');
-            console.log(req);
             if(req.data.length>0)
             setAllPosts(req.data)
         }catch(err){

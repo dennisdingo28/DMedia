@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import axios from "axios";
 
 const Post = (props) => {
-  const {token,imageUrl,imageAlt,createdBy,user,title,description,logged,likes,dislikes,_id} = props;
+  const {token,imageUrl,imageAlt,createdBy,user,title,description,logged,_id} = props;
   const [postActioners,setPostActioners] = useState({
     starUp:false,
     dislike:false,
@@ -12,25 +12,44 @@ const Post = (props) => {
 
   const [postUser,setPostUser] = useState({});
 
-  const [nrLikes,setNrLikes]=useState(Number(likes));
-  const [nrDislikes,setNrDislikes]=useState(Number(dislikes));
+  const [postLikesDislikes,setPostLikesDislikes] = useState({});
+  console.log(postLikesDislikes);
 
   useEffect(()=>{
     decodeUserPost();
+    getCurrentPost();
+    console.log('rqe');
   },[]);
 
   async function decodeUserPost(){
     try{
         const userId = createdBy;
         const req = await axios.get(`/search/userId/${userId}`);
-        console.log(req);
         setPostUser(req.data);
     }catch(err){
       console.log(err);
     }
   }
 
-  
+  async function getCurrentPost(){
+    try{
+      const id = _id;
+      const req = await axios.get(`/search/post/${id}`);
+      const {likes,dislikes}=req.data;
+
+      setPostLikesDislikes({likes,dislikes});
+    }catch(err){
+      console.log(err);
+    }
+  }
+
+  async function handleLikeDislike(){
+    try{
+
+    }catch(err){
+
+    }
+  }
 
   return (
     <div>
@@ -61,31 +80,55 @@ const Post = (props) => {
               {logged && <div className='flex items-center font-Open font-semibold'>
 
                   <div onClick={()=>{
+
+                   setPostLikesDislikes(prev=>{
+                      if(!postActioners.starUp){
+                        if(!postActioners.dislike)
+                          return {...prev,likes:prev.likes+1};
+                        else
+                          return {dislikes:prev.dislikes-1,likes:prev.likes+1}
+                      }
+                      else{
+                        return {...prev,likes:prev.likes-1};
+                      }
+                    })
                   setPostActioners(prevState=>
                   {
                     return {...prevState,starUp:!prevState.starUp,dislike:false}
                   })
-                    //onclick code
-                    if(postActioners.starUp){
-                      
-                    } 
+                 
+                    
                   }
 
                   }className='starUpContainer cursor-pointer duration-100 hover:shadow-[0px_0px_5px_#5a29cc] py-1 flex-1 flex flex-col gap-1 items-center active:scale-[.90]'>
                     {!postActioners.starUp ? <i className="bi bi-star"></i>:<i className="bi bi-star-fill text-yellow-500"></i>}
                     <p>{!postActioners.starUp ? "star up":"starred up"}</p>
-                    <small>{nrLikes}</small>
+                    <small>{postLikesDislikes.likes}</small>
                   </div>
 
                   <div onClick={()=>{
+
+                      setPostLikesDislikes(prev=>{
+                        if(!postActioners.dislike){
+                          if(!postActioners.starUp)
+                            return {...prev,dislikes:prev.dislikes+1};
+                          else
+                            return {likes:prev.likes-1,dislikes:prev.dislikes+1}
+                        }
+                        else{
+                          return {...prev,dislikes:prev.dislikes-1};
+                        }
+                      })
+
                     setPostActioners(prevState=>{
                     return {...prevState,dislike:!prevState.dislike,starUp:false}
                     })
+                  
                 
                   }} className='dislikeContainer cursor-pointer duration-100 hover:shadow-[0px_0px_5px_#5a29cc] py-1 flex-1 flex flex-col gap-1 items-center active:scale-[.90]'>
                     {!postActioners.dislike ? <i className="bi bi-hand-thumbs-down"></i>:<i className="bi bi-hand-thumbs-down-fill text-blue-700"></i>}
                     <p>{!postActioners.dislike?"dislike":"disliked"}</p>
-                    <small>{nrDislikes}</small>
+                    <small>{postLikesDislikes.dislikes}</small>
 
                   </div>
 
