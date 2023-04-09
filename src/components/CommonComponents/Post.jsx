@@ -14,8 +14,8 @@ const Post = (props) => {
   const [numberOfLikes,setNumberOfLikes] = useState([]);
   const [numberOfDislikes,setNumberOfDislikes] = useState([]);
 
-  const [clicked,setClicked] = useState(false);
-  const [loaded,setLoaded] = useState(false);
+  const [clicked,setClicked] = useState(false);//for the async handler for like/dislike
+  const [loaded,setLoaded] = useState(false);// says if the number of likes/dislikes are loaded
 
   useEffect(()=>{
     decodeUserPost();
@@ -172,15 +172,24 @@ const Post = (props) => {
         </div>
         <div className='pBody'>
             <div className='flex flex-col gap-4'>
-              <div className='postTitle mt-2 mb-1'>
-                <p className='font-medium font-Karla text-center text-[1.2em]'>{title}</p>
-              </div>
-              <div className='postDescription'>
-                <p className='text-left font-Karla'>{description}</p>
-              </div>
-              <div className='postImage'>
-                {imageUrl && <img src={imageUrl} alt={imageAlt} className='max-w-[550px] max-h-[550px] w-[100%] h-[100%]'/>}
-              </div>
+             
+                <div className='postTitle mt-2 mb-1'>
+                  <p className='font-medium font-Karla text-center text-[1.2em]'>{title}</p>
+                </div>
+                <div className='flex flex-col gap-4 md:flex-row'>
+                    
+                    <div className='postDescription flex-1'>
+                      <p className='text-left font-Karla'>{description}</p>
+                    </div>
+                    <div className='postImage flex-2'>
+                    {imageUrl && <img src={imageUrl} alt={imageAlt} className='max-w-[550px] max-h-[550px] w-[100%] h-[100%]'/>}
+                    </div>
+                </div>
+               
+        
+             
+            
+             
               {logged && <div className='flex items-center font-Open font-semibold'>
 
                   <div onClick={()=>{
