@@ -15,6 +15,7 @@ const Post = (props) => {
   const [numberOfDislikes,setNumberOfDislikes] = useState([]);
 
   const [clicked,setClicked] = useState(false);
+  const [loaded,setLoaded] = useState(false);
 
   useEffect(()=>{
     decodeUserPost();
@@ -25,6 +26,27 @@ const Post = (props) => {
   useEffect(()=>{
     if(clicked){
       handleLikeDislike();
+    }
+    if(loaded){
+      if(checkUserLike()){
+        setPostActioners(prev=>{
+          return {
+            ...prev,
+            starUp:true
+          }
+        })
+      }
+
+      if(checkUserDislike()){
+       
+          setPostActioners(prev=>{
+            return {
+              ...prev,
+              dislike:true
+            }
+          })
+        
+      }
     }
   },[numberOfLikes,numberOfDislikes])
 
@@ -46,10 +68,31 @@ const Post = (props) => {
       console.log(req.data);
       setNumberOfLikes(req.data.likes);
       setNumberOfDislikes(req.data.dislikes);
+
+      setLoaded(true);
+
     }catch(err){
       console.log(err);
     }
   }
+
+  function checkUserLike(){
+    const filtered = numberOfLikes.filter(postId=>postId===user._id);
+    console.log(filtered);
+    if(filtered.length!==0)
+      return true;
+    return false;
+  }
+
+  function checkUserDislike(){
+    const filtered = numberOfDislikes.filter(postId=>postId===user._id);
+    console.log(filtered);
+    if(filtered.length!==0)
+      return true;
+    return false;
+  }
+
+  
 
   async function handleLikeDislike(){
     try{
