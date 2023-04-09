@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import axios from "axios";
 
 const Post = (props) => {
-  const {token,imageUrl,imageAlt,createdBy,user,title,description,logged,_id} = props;
+  const {token,imageUrl,imageAlt,createdBy,user,title,description,logged,_id,index} = props;
   const [postActioners,setPostActioners] = useState({
     starUp:false,
     dislike:false,
@@ -176,14 +176,19 @@ const Post = (props) => {
                 <div className='postTitle mt-2 mb-1'>
                   <p className='font-medium font-Karla text-center text-[1.2em]'>{title}</p>
                 </div>
-                <div className='flex flex-col gap-4 md:flex-row'>
+                <div className={`flex flex-col gap-4 md:${index%2===0 ? "flex-row-reverse":"flex-row"} md:justify-center`}>
                     
-                    <div className='postDescription flex-1'>
-                      <p className='text-left font-Karla'>{description}</p>
-                    </div>
-                    <div className='postImage flex-2'>
-                    {imageUrl && <img src={imageUrl} alt={imageAlt} className='max-w-[550px] max-h-[550px] w-[100%] h-[100%]'/>}
-                    </div>
+                    {description.trim()!=='' && 
+                      <div className='postDescription flex-1'>
+                        <p className='text-left font-Karla'>{description}</p>
+                      </div>
+                    }
+                    {imageUrl &&
+                      <div className='postImage flex-1'>
+                        <img src={imageUrl} alt={imageAlt} className='max-w-[750px] max-h-[450px] min-w-[250px] min-h-[250px] w-[100%] h-[100%] mx-auto'/>
+                      </div>
+                    }
+                    
                 </div>
                
         

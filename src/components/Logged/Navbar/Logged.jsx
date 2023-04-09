@@ -104,7 +104,7 @@ const Logged = ({user,sideMenu,setSideMenu}) => {
                                                })}
                                             </div>
                                         </div>        
-                                    </div>:                                <p>{searchContainer}</p>
+                                    </div>:<p>{searchContainer}</p>
                                 }
                                 
                             </div>

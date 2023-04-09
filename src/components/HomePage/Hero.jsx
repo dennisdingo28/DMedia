@@ -35,8 +35,8 @@ const Hero = (props) => {
                     <div className='postBody'>
                         <div className='postsContainer flex flex-col gap-10'>
                             {
-                                allPosts.length!==0 ? allPosts.map(post=>{
-                                    return <Post token={token} user={user} key={post._id} {...post} logged={logged}/>
+                                allPosts.length!==0 ? allPosts.map((post,index)=>{
+                                    return <Post token={token} user={user} key={post._id} {...post} logged={logged} index={index}/>
                                 })
                                 :
                                 <p>Loading...</p>
