@@ -14,6 +14,7 @@ const Post = (props) => {
   const [numberOfLikes,setNumberOfLikes] = useState([]);
   const [numberOfDislikes,setNumberOfDislikes] = useState([]);
 
+  const [clicked,setClicked] = useState(false);
 
   useEffect(()=>{
     decodeUserPost();
@@ -21,7 +22,11 @@ const Post = (props) => {
   },[]);
 
 
- 
+  useEffect(()=>{
+    if(clicked){
+      handleLikeDislike();
+    }
+  },[numberOfLikes,numberOfDislikes])
 
   async function decodeUserPost(){
     try{
@@ -50,7 +55,7 @@ const Post = (props) => {
     try{
       console.log('got here');
       const id = _id;
-      const req = await axios.patch(`/post/updatePost/${id}`,{},{
+      const req = await axios.patch(`/post/updatePost/${id}`,{numberOfLikes,numberOfDislikes},{
         headers:{
           Authorization:`Bearer ${token}`
         }
@@ -143,6 +148,8 @@ const Post = (props) => {
                   {
                     return {...prevState,starUp:!prevState.starUp,dislike:false}
                   })
+                  setClicked(true);
+
                   }
 
                   }className='starUpContainer cursor-pointer duration-100 hover:shadow-[0px_0px_5px_#5a29cc] py-1 flex-1 flex flex-col gap-1 items-center active:scale-[.90]'>
@@ -157,6 +164,8 @@ const Post = (props) => {
                     setPostActioners(prevState=>{
                     return {...prevState,dislike:!prevState.dislike,starUp:false}
                     })
+                    setClicked(true);
+
                   }} className='dislikeContainer cursor-pointer duration-100 hover:shadow-[0px_0px_5px_#5a29cc] py-1 flex-1 flex flex-col gap-1 items-center active:scale-[.90]'>
                     {!postActioners.dislike ? <i className="bi bi-hand-thumbs-down"></i>:<i className="bi bi-hand-thumbs-down-fill text-blue-700"></i>}
                     <p>{!postActioners.dislike?"dislike":"disliked"}</p>
