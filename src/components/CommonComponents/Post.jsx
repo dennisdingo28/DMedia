@@ -9,28 +9,24 @@ const Post = (props) => {
     share:false,
     reported:false
   })
-  const [clicked,setClicked] = useState(false);//handle side effect when click the like and dislike
   const [postUser,setPostUser] = useState({});
 
-  const [nrLikes,setNrLikes] = useState([]);
-  const [nrDislikes,setNrDislikes] = useState([]);
+  const [numberOfLikes,setNumberOfLikes] = useState([]);
+  const [numberOfDislikes,setNumberOfDislikes] = useState([]);
+
 
   useEffect(()=>{
     decodeUserPost();
     getCurrentPost();
-    console.log('rqe');
   },[]);
 
-  useEffect(()=>{
-    if(clicked)
-      handleLikeDislike();
-  },[nrLikes,nrDislikes]);
+
+ 
 
   async function decodeUserPost(){
     try{
         const userId = createdBy;
         const req = await axios.get(`/search/userId/${userId}`);
-        console.log(req.data);
         setPostUser(req.data);
     }catch(err){
       console.log(err);
@@ -41,10 +37,10 @@ const Post = (props) => {
     try{
       const id = _id;
       const req = await axios.get(`/search/post/${id}`);
-      const {likes,dislikes}=req.data;
-      setNrLikes(likes);
-      setNrDislikes(dislikes);
+      
       console.log(req.data);
+      setNumberOfLikes(req.data.likes);
+      setNumberOfDislikes(req.data.dislikes);
     }catch(err){
       console.log(err);
     }
@@ -52,14 +48,62 @@ const Post = (props) => {
 
   async function handleLikeDislike(){
     try{
+      console.log('got here');
       const id = _id;
-      const req = await axios.patch(`/post/updatePost/${id}`,{nrLikes,nrDislikes},{
+      const req = await axios.patch(`/post/updatePost/${id}`,{},{
         headers:{
           Authorization:`Bearer ${token}`
         }
       })
       console.log(req);
     }catch(err){
+    }
+  }
+
+  function handleLikes()
+  {
+    if(!postActioners.starUp){
+      if(!postActioners.dislike){
+        setNumberOfLikes(prevLikes=>{
+          return [...prevLikes,user._id];
+        })
+      }else{
+        setNumberOfDislikes(prevDislikes=>{
+          const filteredDislikes = prevDislikes.filter(dislikeId=>dislikeId!==user._id);
+          return [...filteredDislikes];
+        })
+        setNumberOfLikes(prevLikes=>{
+          return [...prevLikes,user._id];
+        })
+      }
+    }else{
+      setNumberOfLikes(prevLikes=>{
+        const filteredLikes = prevLikes.filter(likeId=>likeId!==user._id);
+        return [...filteredLikes];
+      })
+    }
+  }
+
+  function handleDislikes(){
+    if(!postActioners.dislike){
+      if(!postActioners.starUp){
+        setNumberOfDislikes(prevDislikes=>{
+          return [...prevDislikes,user._id];
+        })
+      }else{
+        setNumberOfLikes(prevLikes=>{
+          const filteredLikes = prevLikes.filter(likeId=>likeId!==user._id);
+          return [...filteredLikes];
+        })
+        setNumberOfDislikes(prevDislikes=>{
+          return [...prevDislikes,user._id];
+        })
+      }
+    }else{
+      setNumberOfDislikes(prevDislikes=>{
+        const filteredDislikes = prevDislikes.filter(dislikeId=>dislikeId!==user._id);
+        return [...filteredDislikes];
+      })
     }
   }
 
@@ -93,66 +137,30 @@ const Post = (props) => {
 
                   <div onClick={()=>{
 
-                    setNrLikes(prev=>{
-                      if(!postActioners.starUp){
-                        if(!postActioners.dislike){
-                          return [...prev,user._id];
-                        }else{
-                          setNrDislikes(prev=>{
-                            const filteredDislikes = prev.filter(userId=>userId!==user._id);
-                            return filteredDislikes;
-                          })
-                          return [...prev,user._id];
-                        }
-                      }else{
-                        setNrLikes(prev=>{
-                          const filteredLikes = prev.filter(userId=>userId!==user._id);
-                          return filteredLikes;
-                        })
-                      }
-                    })
+                    handleLikes();
 
                   setPostActioners(prevState=>
                   {
                     return {...prevState,starUp:!prevState.starUp,dislike:false}
                   })
-                  setClicked(true);
                   }
 
                   }className='starUpContainer cursor-pointer duration-100 hover:shadow-[0px_0px_5px_#5a29cc] py-1 flex-1 flex flex-col gap-1 items-center active:scale-[.90]'>
                     {!postActioners.starUp ? <i className="bi bi-star"></i>:<i className="bi bi-star-fill text-yellow-500"></i>}
                     <p>{!postActioners.starUp ? "star up":"starred up"}</p>
-                    <small>{nrLikes.length}</small>
+                    <small>{numberOfLikes ? numberOfLikes.length:"loading..."}</small>
                   </div>
 
                   <div onClick={()=>{
-
-                      setNrDislikes(prev=>{
-                        if(!postActioners.dislike){
-                          if(!postActioners.starUp){
-                            return [...prev,user._id];
-                          }else{
-                            setNrLikes(prev=>{
-                              const filteredLikes = prev.filter(userId=>userId!==user._id);
-                              return filteredLikes;
-                            })
-                            return [...prev,user._id];
-                          }
-                        }else{
-                          setNrLikes(prev=>{
-                            const filteredDisLikes = prev.filter(userId=>userId!==user._id);
-                            return filteredDisLikes;
-                          })
-                        }
-                      })
+                    handleDislikes();
+                     
                     setPostActioners(prevState=>{
                     return {...prevState,dislike:!prevState.dislike,starUp:false}
                     })
-                    setClicked(true);
                   }} className='dislikeContainer cursor-pointer duration-100 hover:shadow-[0px_0px_5px_#5a29cc] py-1 flex-1 flex flex-col gap-1 items-center active:scale-[.90]'>
                     {!postActioners.dislike ? <i className="bi bi-hand-thumbs-down"></i>:<i className="bi bi-hand-thumbs-down-fill text-blue-700"></i>}
                     <p>{!postActioners.dislike?"dislike":"disliked"}</p>
-                    <small>{nrDislikes.length}</small>
+                    <small>{numberOfDislikes ? numberOfDislikes.length:"loading..."}</small>
 
                   </div>
 
