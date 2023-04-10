@@ -13,15 +13,39 @@ const Post = (props) => {
 
   const [numberOfLikes,setNumberOfLikes] = useState([]);
   const [numberOfDislikes,setNumberOfDislikes] = useState([]);
+  const [comments,setComments] = useState([]);
 
   const [clicked,setClicked] = useState(false);//for the async handler for like/dislike
   const [loaded,setLoaded] = useState(false);// says if the number of likes/dislikes are loaded
+  const [commentsLoaded,setCommentsLoaded] = useState(false);
+  const [commentsUsers,setCommentsUsers] = useState([]);
+
+  console.log(commentsUsers);
 
   useEffect(()=>{
     decodeUserPost();
     getCurrentPost();
   },[]);
 
+  useEffect(()=>{
+    if(commentsLoaded){
+      comments.forEach(commentId=>{
+        decodeUserComment(commentId);
+      })
+    }
+  },[commentsLoaded])
+
+  async function decodeUserComment(commentId){
+    try{
+      const id = commentId;
+      const req = await axios.get(`/search/userId/${id}`);
+      setCommentsUsers(prev=>{
+        return [...prev,req.data]
+      })
+    }catch(err){
+      console.log(err);
+    }
+  }
 
   useEffect(()=>{
     if(clicked){
@@ -65,11 +89,11 @@ const Post = (props) => {
       const id = _id;
       const req = await axios.get(`/search/post/${id}`);
       
-      console.log(req.data);
       setNumberOfLikes(req.data.likes);
       setNumberOfDislikes(req.data.dislikes);
-
+      setComments(req.data.comments);
       setLoaded(true);
+      setCommentsLoaded(true);
 
     }catch(err){
       console.log(err);
@@ -78,7 +102,6 @@ const Post = (props) => {
 
   function checkUserLike(){
     const filtered = numberOfLikes.filter(postId=>postId===user._id);
-    console.log(filtered);
     if(filtered.length!==0)
       return true;
     return false;
@@ -86,7 +109,6 @@ const Post = (props) => {
 
   function checkUserDislike(){
     const filtered = numberOfDislikes.filter(postId=>postId===user._id);
-    console.log(filtered);
     if(filtered.length!==0)
       return true;
     return false;
@@ -96,14 +118,12 @@ const Post = (props) => {
 
   async function handleLikeDislike(){
     try{
-      console.log('got here');
       const id = _id;
       const req = await axios.patch(`/post/updatePost/${id}`,{numberOfLikes,numberOfDislikes},{
         headers:{
           Authorization:`Bearer ${token}`
         }
       })
-      console.log(req);
     }catch(err){
     }
   }
@@ -155,6 +175,8 @@ const Post = (props) => {
     }
   }
 
+
+
   return (
     <div>
       <div className='post'>
@@ -176,22 +198,28 @@ const Post = (props) => {
                 <div className='postTitle mt-2 mb-1'>
                   <p className='font-medium font-Karla text-center text-[1.2em]'>{title}</p>
                 </div>
-                <div className={`flex flex-col gap-4 md:${index%2===0 ? "flex-row-reverse":"flex-row"} md:justify-center`}>
-                    
-                    {description.trim()!=='' && 
-                      <div className='postDescription flex-1'>
-                        <p className='text-left font-Karla'>{description}</p>
-                      </div>
-                    }
-                    {imageUrl &&
-                      <div className='postImage flex-1'>
-                        <img src={imageUrl} alt={imageAlt} className='max-w-[750px] max-h-[450px] min-w-[250px] min-h-[250px] w-[100%] h-[100%] mx-auto'/>
-                      </div>
-                    }
-                    
+
+                <div className={`flex`}>
+                    <div className={`flex flex-col flex-1 gap-4 ${index%2===0 ? "md:flex-row-reverse":"md:flex-row"} md:justify-center`}>
+                        
+                        {description.trim()!=='' && 
+                          <div className='postDescription flex-1'>
+                            <p className='text-left font-Karla'>{description}</p>
+                          </div>
+                        }
+                        
+                        {imageUrl &&
+                          <div className='postImage flex-1'>
+                            <img src={imageUrl} alt={imageAlt} className='rounded-md max-w-[750px] max-h-[450px] min-w-[250px] min-h-[250px] w-[100%] h-[100%] mx-auto'/>
+                          </div>
+                        }
+                        
+                    </div>
+                  
                 </div>
+                
                
-        
+                    
              
             
              
@@ -237,6 +265,14 @@ const Post = (props) => {
                     <p>{!postActioners.share ? "share":"shared"}</p>
                   </div>
 
+
+                  <div className='commentsContainer cursor-pointer duration-100 hover:shadow-[0px_0px_5px_#5a29cc] py-1 flex-1 flex flex-col gap-1 items-center active:scale-[.90]'>
+                    <i className="bi bi-chat-square-text-fill"></i>
+                    <p>comments</p>
+                  </div>
+                  
+
+
                   <div onClick={()=>setPostActioners(prevState=>{
                     return {...prevState,reported:!prevState.reported}
                   })} className='reportContainer cursor-pointer duration-100 hover:shadow-[0px_0px_5px_#5a29cc] py-1 flex-1 flex flex-col gap-1 items-center active:scale-[.90]'>
@@ -245,6 +281,15 @@ const Post = (props) => {
                   </div>
                   
                 </div>}
+            </div>
+            <div className='commentsSection'>
+                <div className="commentsContainer">
+                  {
+                    commentsUsers.length === 0 ? "Retrieving comments...":commentsUsers.map((com,index)=>{
+                      return <p key={index}>{com.username}</p>
+                    })
+                  }
+                </div>
             </div>
         </div>
       </div>

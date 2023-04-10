@@ -11,7 +11,6 @@ function App() {
   const [user,setUser] = useState({});
   const [logged,setLogged] = useState(false);
 
-  console.log(user);
     useEffect(()=>{
       decodeUserToken(token);
     },[token]);
@@ -25,7 +24,6 @@ function App() {
         }
       })
       if(req.data.good){
-        console.log(req);
         setUser(req.data.user)
         setLogged(true);
       }else{
