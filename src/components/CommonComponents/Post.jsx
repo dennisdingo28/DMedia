@@ -255,7 +255,7 @@ const Post = (props) => {
                         
                         {imageUrl &&
                           <div className='postImage flex-1'>
-                            <img src={imageUrl} alt={imageAlt} className='rounded-md max-w-[750px] max-h-[450px] min-w-[250px] min-h-[250px] w-[100%] h-[100%] mx-auto'/>
+                            <img src={imageUrl} alt={imageAlt} className='rounded-md max-w-[750px] max-h-[550px] min-w-[250px] min-h-[250px] w-[100%] h-[100%] mx-auto'/>
                           </div>
                         }
                         

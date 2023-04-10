@@ -48,8 +48,15 @@ const LoggedHero = (props) => {
                 authorization:`Bearer ${token}`
             }
         });
+        const id = user._id;
+        const req1 = await axios.patch(`/user/${id}`,{posts:[...user.posts,req.data.post._id]},{
+            headers:{
+                authorization:`Bearer ${token}`
+            }
+        })
+
         setFormStatus("Post was successfully created!");
-        console.log(req);
+        console.log(req1);
     }
 
     function clearInputs(){

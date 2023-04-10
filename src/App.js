@@ -5,6 +5,7 @@ import Authenticate from './components/AuthPage/Authenticate';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import NotFoundPage from './components/CommonComponents/NotFoundPage';
+import Profile from './components/ProfilePage/Profile';
 
 function App() {
   const [token,setToken] = useState(function(){return localStorage.getItem('token')} || undefined);
@@ -40,6 +41,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home user={user} setUser={setUser} logged={logged} setLogged={setLogged} token={token}/>}/>
         <Route path="/auth" element={<Authenticate setToken={setToken}/>}/>
+        {logged && <Route path='/myProfile' element={<Profile user={user} setUser={setUser} logged={logged} setLogged={setLogged} token={token}/>}/>}
         <Route path="*" element={<NotFoundPage/>}/>
       </Routes>
     </Router>
