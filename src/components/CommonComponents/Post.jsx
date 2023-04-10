@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState,useRef } from 'react'
 import axios from "axios";
+import Comment from './Comment';
 
 const Post = (props) => {
   const {token,imageUrl,imageAlt,createdBy,user,title,description,logged,_id,index} = props;
@@ -20,7 +21,11 @@ const Post = (props) => {
   const [commentsLoaded,setCommentsLoaded] = useState(false);
   const [commentsUsers,setCommentsUsers] = useState([]);
 
-  console.log(commentsUsers);
+  const [commentStatus,setCommentStatus] = useState("");
+
+  const commentInput= useRef();
+  const [commentPlaceholder,setCommentPlaceholder] = useState("@comment");
+
 
   useEffect(()=>{
     decodeUserPost();
@@ -29,18 +34,19 @@ const Post = (props) => {
 
   useEffect(()=>{
     if(commentsLoaded){
-      comments.forEach(commentId=>{
-        decodeUserComment(commentId);
+      comments.forEach(commentObj=>{
+        decodeUserComment(commentObj.userId,commentObj.commentText);
       })
     }
   },[commentsLoaded])
 
-  async function decodeUserComment(commentId){
+  async function decodeUserComment(commentId,commentText){
     try{
       const id = commentId;
       const req = await axios.get(`/search/userId/${id}`);
       setCommentsUsers(prev=>{
-        return [...prev,req.data]
+        return [...prev,{username:req.data.username,
+          profileImage:req.data.profileUrl,postDesc:commentText,id:req.data._id}]
       })
     }catch(err){
       console.log(err);
@@ -88,7 +94,7 @@ const Post = (props) => {
     try{
       const id = _id;
       const req = await axios.get(`/search/post/${id}`);
-      
+      console.log(req);
       setNumberOfLikes(req.data.likes);
       setNumberOfDislikes(req.data.dislikes);
       setComments(req.data.comments);
@@ -113,8 +119,6 @@ const Post = (props) => {
       return true;
     return false;
   }
-
-  
 
   async function handleLikeDislike(){
     try{
@@ -175,8 +179,49 @@ const Post = (props) => {
     }
   }
 
+  const [toggleComments,setToggleComments] = useState(false);
+
+  async function handleComment(){
+    try{  
+      if(commentInput.current.value.trim()==='')
+      {
+        setCommentPlaceholder("cannot create an empty comment");
+      }else{
+        setCommentStatus("Loading...")
+        setCommentsUsers(prev=>{
+          return [...prev,{username:user.username,
+            profileImage:user.profileUrl,postDesc:commentInput.current.value,id:user._id}];
+        })
+        const req = await axios.patch(`/post/updatePost/${_id}`,{comments:[...comments,{userId:user._id,commentText:commentInput.current.value}]},{
+          headers:{
+            authorization:`Bearer ${token}`
+          }
+        })
+        console.log(req);
+
+        if(req.data.good===false){
+          setCommentStatus("Something went wrong.Please try again later.");
+        }else{
+          setCommentStatus("Comment was successfully added!");
+          
+        }
+      
+      }
+      setTimeout(()=>{
+        clearCommentInput();
+      },2000)
+    }catch(err){
+      setCommentStatus("Something went wrong with the server.Please try again later.")
+      console.log(err);
+    }
+  }
 
 
+  function clearCommentInput(){
+    setCommentPlaceholder("@comment");
+    setCommentStatus("");
+    commentInput.current.value="";
+  }
   return (
     <div>
       <div className='post'>
@@ -214,15 +259,9 @@ const Post = (props) => {
                           </div>
                         }
                         
-                    </div>
-                  
+                    </div>                  
                 </div>
-                
-               
-                    
-             
-            
-             
+
               {logged && <div className='flex items-center font-Open font-semibold'>
 
                   <div onClick={()=>{
@@ -266,7 +305,9 @@ const Post = (props) => {
                   </div>
 
 
-                  <div className='commentsContainer cursor-pointer duration-100 hover:shadow-[0px_0px_5px_#5a29cc] py-1 flex-1 flex flex-col gap-1 items-center active:scale-[.90]'>
+                  <div className='commentsContainer cursor-pointer duration-100 hover:shadow-[0px_0px_5px_#5a29cc] py-1 flex-1 flex flex-col gap-1 items-center active:scale-[.90]' onClick={()=>{
+                    setToggleComments(!toggleComments)
+                  }}>
                     <i className="bi bi-chat-square-text-fill"></i>
                     <p>comments</p>
                   </div>
@@ -284,10 +325,28 @@ const Post = (props) => {
             </div>
             <div className='commentsSection'>
                 <div className="commentsContainer">
-                  {
-                    commentsUsers.length === 0 ? "Retrieving comments...":commentsUsers.map((com,index)=>{
-                      return <p key={index}>{com.username}</p>
-                    })
+                  <div className='commentsHeader mt-3 bg-[#1e1e1e] rounded-sm p-1 cursor-pointer' onClick={()=>{
+                    setToggleComments(!toggleComments)
+                  }}>
+                    <p className='font-semibold font-Karla'>See Comments ({commentsUsers.length===0 ? "retriving comments..":commentsUsers.length})</p>
+                  </div>
+                  {toggleComments &&
+                    <div>
+                        {commentsUsers.length===0 && <p>It's empty here :/</p>}
+
+                      <div className='commentParent max-h-[250px] overflow-y-scroll p-3 flex flex-col gap-3 bg-[#111111]'>
+                        {commentsUsers.map((comUser,index)=>{
+                          return <Comment key={index} userId={user._id} {...comUser}/>
+                        })}
+                      </div>
+
+                      <div className='createCommentContainer flex items-center gap-4 mt-4'>
+                        <input ref={commentInput} type='text' className='w-[100%] outline-none bg-transparent border-b border-gray-500 text-gray-400' placeholder={commentPlaceholder}/>
+                        <button onClick={handleComment} className='bg-gray-600 outline-none font-medium font-Karla cursor-pointer px-3 py-1 border-2 border-gray-600 active:border-gray-400 active:scale-90 duration-[.08s]'>Comment</button>
+                      </div>
+                      <p className='commentStatus'>{commentStatus}</p>
+                    </div>
+                  
                   }
                 </div>
             </div>
