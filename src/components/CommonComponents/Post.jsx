@@ -262,7 +262,7 @@ const Post = (props) => {
                     </div>                  
                 </div>
 
-              {logged && <div className='flex items-center font-Open font-semibold'>
+              {logged && <div className='flex gap-3 font-Open font-semibold'>
 
                   <div onClick={()=>{
 
@@ -276,9 +276,9 @@ const Post = (props) => {
 
                   }
 
-                  }className='starUpContainer cursor-pointer duration-100 hover:shadow-[0px_0px_5px_#5a29cc] py-1 flex-1 flex flex-col gap-1 items-center active:scale-[.90]'>
+                  }className='starUpContainer h-[100%] cursor-pointer duration-100 hover:shadow-[0px_0px_5px_#5a29cc] py-1 flex-1 flex flex-col gap-1 items-center active:scale-[.90]'>
                     {!postActioners.starUp ? <i className="bi bi-star"></i>:<i className="bi bi-star-fill text-yellow-500"></i>}
-                    <p>{!postActioners.starUp ? "star up":"starred up"}</p>
+                    <p className='text-center'>{!postActioners.starUp ? "star up":"starred up"}</p>
                     <small>{numberOfLikes ? numberOfLikes.length:"loading..."}</small>
                   </div>
 
@@ -292,7 +292,7 @@ const Post = (props) => {
 
                   }} className='dislikeContainer cursor-pointer duration-100 hover:shadow-[0px_0px_5px_#5a29cc] py-1 flex-1 flex flex-col gap-1 items-center active:scale-[.90]'>
                     {!postActioners.dislike ? <i className="bi bi-hand-thumbs-down"></i>:<i className="bi bi-hand-thumbs-down-fill text-blue-700"></i>}
-                    <p>{!postActioners.dislike?"dislike":"disliked"}</p>
+                    <p className='text-center'>{!postActioners.dislike?"dislike":"disliked"}</p>
                     <small>{numberOfDislikes ? numberOfDislikes.length:"loading..."}</small>
 
                   </div>
@@ -301,7 +301,7 @@ const Post = (props) => {
                     return {...prevState,share:!prevState.share}
                   })} className='shareContainer cursor-pointer duration-100 hover:shadow-[0px_0px_5px_#5a29cc] py-1 flex-1 flex flex-col gap-1 items-center active:scale-[.90]'>
                     {!postActioners.share ? <i className="bi bi-globe"></i>:<i className="bi bi-share-fill text-green-700"></i>}
-                    <p>{!postActioners.share ? "share":"shared"}</p>
+                    <p className='text-center'>{!postActioners.share ? "share":"shared"}</p>
                   </div>
 
 
@@ -309,7 +309,7 @@ const Post = (props) => {
                     setToggleComments(!toggleComments)
                   }}>
                     <i className="bi bi-chat-square-text-fill"></i>
-                    <p>comments</p>
+                    <p className='text-center'>comments</p>
                   </div>
                   
 
@@ -328,13 +328,13 @@ const Post = (props) => {
                   <div className='commentsHeader mt-3 bg-[#1e1e1e] rounded-sm p-1 cursor-pointer' onClick={()=>{
                     setToggleComments(!toggleComments)
                   }}>
-                    <p className='font-semibold font-Karla'>See Comments ({commentsUsers.length===0 ? "retriving comments..":commentsUsers.length})</p>
+                    <p className='font-semibold font-Karla'>See Comments ({!commentsUsers? "retriving comments..":commentsUsers.length})</p>
                   </div>
                   {toggleComments &&
                     <div>
                         {commentsUsers.length===0 && <p>It's empty here :/</p>}
 
-                      <div className='commentParent max-h-[250px] overflow-y-scroll p-3 flex flex-col gap-3 bg-[#111111]'>
+                      <div className='commentParent max-h-[350px] overflow-y-scroll p-3 flex flex-col gap-3 bg-[#111111]'>
                         {commentsUsers.map((comUser,index)=>{
                           return <Comment key={index} userId={user._id} {...comUser}/>
                         })}
