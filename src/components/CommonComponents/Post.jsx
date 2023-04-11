@@ -127,8 +127,17 @@ const Post = (props) => {
         headers:{
           Authorization:`Bearer ${token}`
         }
-      })
+      });
+
+      const userID=createdBy;
+      const req1 = await axios.patch(`/user/${userID}`,{totalLikes:numberOfLikes.length,totalDislikes:numberOfDislikes.length},{
+        headers:{
+          authorization:`Bearer ${token}`
+        }
+      });
+
     }catch(err){
+      console.log(err);
     }
   }
 
