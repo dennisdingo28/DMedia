@@ -20,10 +20,7 @@ const Profile = (props) => {
         getUserPost();
     },[]);
 
-
     
-   
-
     async function getUserPost(){
         try{
             console.log('once');
@@ -44,15 +41,15 @@ const Profile = (props) => {
     }
 
   return (
-    <div className='min-h-screen bg-dark'>
-        <div className='profilePageWrapper parent-container text-white'>
-            <div>
-                <div className='profilePageLeftSide pt-3'>
-                    <div className='flex flex-col items-center justify-center'>
+    <div className='h-screen bg-dark profilePageWrapperContainer'>
+        <div className='profilePageWrapper text-white'>
+            <div className='flex flex-col xx:flex-row'>
+                <div className='profilePageLeftSide pt-3 xx:h-screen xx:bg-[#1a1919] xx:rounded-tr-3xl xx:rounded-br-3xl xx:px-3'>
+                    <div className='flex flex-col items-center justify-center cursor-pointer'>
                         <img src={user.profileUrl} className='w-[220px] h-[220px] rounded-full xs:w-[270px] xs:h-[270px]' alt='profile'/>
                         <h1 className='font-medium font-Open text-[1.3em]'>{user.username}</h1>
                     </div>
-                    <div className='profileRatingContainer flex items-center justify-between mt-2'>
+                    <div className='profileRatingContainer flex items-center justify-between md:justify-around mt-2 xx:gap-10 xx:mt-5'>
                         <div className='closersContainer flex flex-col gap-1 justify-center items-center'>
                             <i className='bi bi-people-fill'></i>
                             <p>150</p>
@@ -79,15 +76,15 @@ const Profile = (props) => {
                         <h3 className='font-semibold text-center mt-4 text-[1.1em] font-Karla'><span className='text-darkViolet'>DMedia</span> member from {day}/{month}/{year}</h3>
                     </div>
                 </div>
-                <div className='profileContentSide'>
-                    <div className='profilePostsContainer mt-5'>
+                <div className='profileContentSide flex-1 flex items-center justify-center h-screen'>
+                    <div className='profilePostsContainer h-screen mt-5'>
                         <h2 className='font-bold tracking-wider text-[1.3em]'>{user.username}'s posts</h2>
 
                         <div className='profilePosts mt-10 pb-10 flex flex-col gap-12'>
                             {!loaded ? "loading...":
                             
                                 userPosts.map((post,index)=>{
-                                    return  <Post token={token} user={user} key={post._id} {...post} logged={logged} index={index}/>
+                                    return <Post token={token} user={user} key={post._id} {...post} logged={logged} index={index}/>
                                 })
                             }
                         </div>
