@@ -225,12 +225,14 @@ const Post = (props) => {
     }
   }
 
+    function clearCommentInput(){
+      setCommentPlaceholder("@comment");
+      setCommentStatus("");
+      if (commentInput && commentInput.current) {
+        commentInput.current.value = "";
+      }
+    }
 
-  function clearCommentInput(){
-    setCommentPlaceholder("@comment");
-    setCommentStatus("");
-    commentInput.current.value="";
-  }
   return (
     <div>
       <div className='post'>
