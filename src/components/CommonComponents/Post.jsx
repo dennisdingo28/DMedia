@@ -247,7 +247,7 @@ const Post = (props) => {
           </div>
         </div>
         <div className='pBody'>
-            <div className='flex flex-col gap-4'>
+            <div className='flex flex-col gap-4 relative'>
              
                 <div className='postTitle mt-2 mb-1'>
                   <p className='font-medium font-Karla text-center text-[1.2em]'>{title}</p>
@@ -331,8 +331,8 @@ const Post = (props) => {
                   </div>
                   
                 </div>}
-            </div>
-            <div className='commentsSection'>
+
+                <div className={`commentsSection xx:absolute top-0 ${index%2==0 ? "right-0":"left-0"}`}>
                 <div className="commentsContainer">
                   <div className='commentsHeader mt-3 bg-[#1e1e1e] rounded-sm p-1 cursor-pointer' onClick={()=>{
                     setToggleComments(!toggleComments)
@@ -349,16 +349,25 @@ const Post = (props) => {
                         })}
                       </div>
 
-                      <div className='createCommentContainer flex items-center gap-4 mt-4'>
+                        {logged && <div>
+                          <div className='createCommentContainer flex items-center gap-4 mt-4'>
                         <input ref={commentInput} type='text' className='w-[100%] outline-none bg-transparent border-b border-gray-500 text-gray-400' placeholder={commentPlaceholder}/>
                         <button onClick={handleComment} className='bg-gray-600 outline-none font-medium font-Karla cursor-pointer px-3 py-1 border-2 border-gray-600 active:border-gray-400 active:scale-90 duration-[.08s]'>Comment</button>
                       </div>
-                      <p className='commentStatus'>{commentStatus}</p>
+                      <p className='commentStatus'>{commentStatus}</p></div>}
+                     
                     </div>
                   
                   }
                 </div>
+                </div>
+
+
             </div>
+
+
+           
+
         </div>
       </div>
     </div>
