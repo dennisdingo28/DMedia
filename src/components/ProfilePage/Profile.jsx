@@ -44,7 +44,7 @@ const Profile = (props) => {
     <div className='h-screen bg-dark profilePageWrapperContainer'>
         <div className='profilePageWrapper text-white'>
             <div className='flex flex-col xx:flex-row'>
-                <div className='profilePageLeftSide pt-3 xx:h-screen xx:bg-[#1a1919] xx:rounded-tr-3xl xx:rounded-br-3xl xx:px-3'>
+                <div className='profilePageLeftSide pt-3 xx:h-screen xx:bg-[#1a1919] xx:rounded-tr-3xl xx:rounded-br-3xl xx:px-3 w-[100%] max-w-[350px]'>
                     <div className='flex flex-col items-center justify-center cursor-pointer'>
                         <img src={user.profileUrl} className='w-[220px] h-[220px] rounded-full xs:w-[270px] xs:h-[270px]' alt='profile'/>
                         <h1 className='font-medium font-Open text-[1.3em]'>{user.username}</h1>
@@ -76,7 +76,7 @@ const Profile = (props) => {
                         <h3 className='font-semibold text-center mt-4 text-[1.1em] font-Karla'><span className='text-darkViolet'>DMedia</span> member from {day}/{month}/{year}</h3>
                     </div>
                 </div>
-                <div className='profileContentSide flex-1 flex items-center justify-center h-screen'>
+                <div className='profileContentSide flex-1 flex items-center justify-center h-screen max-w-[1350px] mx-auto'>
                     <div className='profilePostsContainer h-screen mt-5'>
                         <h2 className='font-bold tracking-wider text-[1.3em]'>{user.username}'s posts</h2>
 
