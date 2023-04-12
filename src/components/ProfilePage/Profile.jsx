@@ -1,9 +1,9 @@
-import React from 'react'
+import React,{useState,useEffect} from 'react'
+import Post from '../CommonComponents/Post';
+import axios from "axios";
 
 const Profile = (props) => {
-    const {user,setUser,token} = props;
-    console.log(user);
-
+    const {user,setUser,token,logged} = props;
 
     const createdAt = new Date(user.createdAt);
 
@@ -11,39 +11,89 @@ const Profile = (props) => {
     const month = createdAt.toLocaleString('default',{month:"numeric"});
     const year = createdAt.getFullYear();
 
+    const [userPosts,setUserPosts] = useState([]);
+    const [loaded,setLoaded] = useState(false);
+
+    console.log(userPosts);
+
+    useEffect(()=>{
+        getUserPost();
+    },[]);
+
+
+    
+   
+
+    async function getUserPost(){
+        try{
+            console.log('once');
+            const encodedUserPosts = user.posts;
+            console.log(encodedUserPosts);
+            const posts = [];
+            for(const post of encodedUserPosts){
+                
+                const req = await axios.get(`/search/post/${post}`);
+                console.log(req);
+                posts.push(req.data);
+            }
+            setUserPosts(posts);
+            setLoaded(true);
+        }catch(err){
+            console.log(err);
+        }
+    }
+
   return (
     <div className='min-h-screen bg-dark'>
         <div className='profilePageWrapper parent-container text-white'>
-            
-            <div className='profilePageLeftSide pt-3'>
-                <div className='flex flex-col items-center justify-center'>
-                    <img src={user.profileUrl} className='w-[220px] h-[220px] rounded-full xs:w-[270px] xs:h-[270px]' alt='profile'/>
-                    <h1 className='font-medium font-Open text-[1.3em]'>{user.username}</h1>
+            <div>
+                <div className='profilePageLeftSide pt-3'>
+                    <div className='flex flex-col items-center justify-center'>
+                        <img src={user.profileUrl} className='w-[220px] h-[220px] rounded-full xs:w-[270px] xs:h-[270px]' alt='profile'/>
+                        <h1 className='font-medium font-Open text-[1.3em]'>{user.username}</h1>
+                    </div>
+                    <div className='profileRatingContainer flex items-center justify-between mt-2'>
+                        <div className='closersContainer flex flex-col gap-1 justify-center items-center'>
+                            <i className='bi bi-people-fill'></i>
+                            <p>150</p>
+                        </div>
+                        <div className='starUpContainer flex flex-col gap-1 justify-center items-center'>
+                            <i className='bi bi-star-fill'></i>
+                            <p>{user.totalLikes}</p>
+                        </div>
+                        <div className='dislikeContainer flex flex-col gap-1 justify-center items-center'>
+                            <i className='bi bi-hand-thumbs-down-fill'></i>
+                            <p>{user.totalDislikes}</p>
+                        </div>
+                        <div className='totalPostsContainer flex flex-col gap-1 justify-center items-center'>
+                            <i className='bi bi-chat-left-text-fill'></i>
+                            <p>{user.posts.length}</p>
+                        </div>
+                        <div className='shareContainer flex flex-col gap-1 justify-center items-center'>
+                            <i className='bi bi-share-fill'></i>
+                            <p>{user.totalShares}</p>
+                        </div>
+                    </div>
+
+                    <div className='profileTimestampsContainer'>
+                        <h3 className='font-semibold text-center mt-4 text-[1.1em] font-Karla'><span className='text-darkViolet'>DMedia</span> member from {day}/{month}/{year}</h3>
+                    </div>
                 </div>
-                <div className='profileRatingContainer flex items-center justify-between'>
-                    <div className='closersContainer flex flex-col gap-1 justify-center items-center'>
-                        <i className='bi bi-people-fill'></i>
-                        <p>150</p>
-                    </div>
-                    <div className='starUpContainer flex flex-col gap-1 justify-center items-center'>
-                        <i className='bi bi-star-fill'></i>
-                        <p>{user.totalLikes}</p>
-                    </div>
-                    <div className='dislikeContainer flex flex-col gap-1 justify-center items-center'>
-                        <i className='bi bi-hand-thumbs-down-fill'></i>
-                        <p>{user.totalDislikes}</p>
-                    </div>
-                    <div className='totalPostsContainer flex flex-col gap-1 justify-center items-center'>
-                        <i className='bi bi-chat-left-text-fill'></i>
-                        <p>{user.posts.length}</p>
-                    </div>
-                    <div className='shareContainer flex flex-col gap-1 justify-center items-center'>
-                        <i className='bi bi-share-fill'></i>
-                        <p>{user.totalShares}</p>
+                <div className='profileContentSide'>
+                    <div className='profilePostsContainer mt-5'>
+                        <h2 className='font-bold tracking-wider text-[1.3em]'>{user.username}'s posts</h2>
+
+                        <div className='profilePosts mt-10 pb-10 flex flex-col gap-12'>
+                            {!loaded ? "loading...":
+                            
+                                userPosts.map((post,index)=>{
+                                    return  <Post token={token} user={user} key={post._id} {...post} logged={logged} index={index}/>
+                                })
+                            }
+                        </div>
                     </div>
                 </div>
-            </div>
-        
+            </div>  
         </div>
     </div>
   )
