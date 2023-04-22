@@ -14,6 +14,9 @@ const Post = (props) => {
 
   const [numberOfLikes,setNumberOfLikes] = useState([]);
   const [numberOfDislikes,setNumberOfDislikes] = useState([]);
+  const [defaultLikes,setDefaultLikes] = useState([]);
+  const [defaultDislikes,setDefaultDislikes] = useState([]);
+
   const [comments,setComments] = useState([]);
 
   const [clicked,setClicked] = useState(false);//for the async handler for like/dislike
@@ -77,6 +80,9 @@ const Post = (props) => {
           })
         
       }
+
+      setDefaultLikes(numberOfLikes);
+      setDefaultDislikes(numberOfDislikes);
     }
   },[numberOfLikes,numberOfDislikes])
 
@@ -97,6 +103,8 @@ const Post = (props) => {
       console.log(req);
       setNumberOfLikes(req.data.likes);
       setNumberOfDislikes(req.data.dislikes);
+      setDefaultLikes(req.data.likes);
+      setDefaultDislikes(req.data.dislikes);
       setComments(req.data.comments);
       setLoaded(true);
       setCommentsLoaded(true);
@@ -130,7 +138,7 @@ const Post = (props) => {
       });
 
       const userID=createdBy;
-      const req1 = await axios.patch(`/user/${userID}`,{totalLikes:numberOfLikes.length,totalDislikes:numberOfDislikes.length},{
+      const req1 = await axios.patch(`/user/${userID}`,{totalPostLikes:numberOfLikes.length,totalPostDislikes:numberOfDislikes.length,defaultLikes:defaultLikes.length,defaultDislikes:defaultDislikes.length},{
         headers:{
           authorization:`Bearer ${token}`
         }
@@ -148,14 +156,18 @@ const Post = (props) => {
         setNumberOfLikes(prevLikes=>{
           return [...prevLikes,user._id];
         })
+
       }else{
         setNumberOfDislikes(prevDislikes=>{
           const filteredDislikes = prevDislikes.filter(dislikeId=>dislikeId!==user._id);
           return [...filteredDislikes];
         })
+      
+
         setNumberOfLikes(prevLikes=>{
           return [...prevLikes,user._id];
         })
+
       }
     }else{
       setNumberOfLikes(prevLikes=>{
@@ -166,6 +178,7 @@ const Post = (props) => {
   }
 
   function handleDislikes(){
+    
     if(!postActioners.dislike){
       if(!postActioners.starUp){
         setNumberOfDislikes(prevDislikes=>{
