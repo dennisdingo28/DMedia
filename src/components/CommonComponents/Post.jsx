@@ -246,6 +246,21 @@ const Post = (props) => {
       }
     }
 
+  async function sharePost(){
+    try{
+      const req = await axios.post(`/post/sharePost/${_id}`,{user,createdBy},{
+        headers:{
+          authorization:`Bearer ${token}`
+        }
+      });
+
+    
+      console.log(req);
+    }catch(err){
+      console.log(err);
+    }
+  }
+
   return (
     <div>
       <div className='post'>
@@ -321,9 +336,12 @@ const Post = (props) => {
 
                   </div>
 
-                  <div onClick={()=>setPostActioners(prevState=>{
+                  <div onClick={()=>{setPostActioners(prevState=>{
                     return {...prevState,share:!prevState.share}
-                  })} className='shareContainer cursor-pointer duration-100 hover:shadow-[0px_0px_5px_#5a29cc] py-1 flex-1 flex flex-col gap-1 items-center active:scale-[.90]'>
+                  })
+                    sharePost();
+                  }
+                  } className='shareContainer cursor-pointer duration-100 hover:shadow-[0px_0px_5px_#5a29cc] py-1 flex-1 flex flex-col gap-1 items-center active:scale-[.90]'>
                     {!postActioners.share ? <i className="bi bi-globe"></i>:<i className="bi bi-share-fill text-green-700"></i>}
                     <p className='text-center'>{!postActioners.share ? "share":"shared"}</p>
                   </div>

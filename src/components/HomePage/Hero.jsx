@@ -39,7 +39,7 @@ const Hero = (props) => {
                                     return <Post token={token} user={user} key={post._id} {...post} logged={logged} index={index}/>
                                 })
                                 :
-                                <p>Loading...</p>
+                                <p className='text-center'>No current posts :/</p>
                             }
                         </div>
                     
