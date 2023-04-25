@@ -8,6 +8,7 @@ const Hero = (props) => {
     const {logged,user,token} = props;
     
     const [allPosts,setAllPosts] = useState([]);
+    console.log(allPosts);
 
     async function getAllPosts(){
         try{        
