@@ -11,7 +11,7 @@ const NotLoggedHero = () => {
                     <img src={globe} alt='globe' className='max-w-[500px] max-h-[500px] w-[100%] h-[100%] object-cover min-w-[330px] min-h-[330px]'/>
                 </div>
                 <div className='max-w-[500px]'>
-                    <p className='font-karla font-medium text-[1.3em]'>We provide the <span className='text-darkViolet'>Experimental</span> Mode to our new <span className='text-darkViolet'>users</span> so that they can easily explore and <span className='text-darkViolet'>explore</span> with our features and <span className='text-darkViolet'>registered</span> users.
+                    <p className='font-karla font-medium text-[1.3em]'>We provide the <span className='text-darkViolet'>Experimental</span> Mode to our new <span className='text-darkViolet'>users</span> so that they can easily explore and <span className='text-darkViolet'>interact</span> with our features and <span className='text-darkViolet'>registered</span> users.
                     <br/>
                     Notice <span className='text-darkViolet'>*</span> :
                     In this mode you cannot post or manipulate the data of other <span className='text-darkViolet'>users</span>.

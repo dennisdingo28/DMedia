@@ -41,7 +41,7 @@ const LoggedHero = (props) => {
         const postData = {
             ...imageSettings,
             title:postTitle,
-            description:postDescription
+            description:postDescription,
         }
         const req = await axios.post("/post/create",postData,{
             headers:{
@@ -49,7 +49,7 @@ const LoggedHero = (props) => {
             }
         });
         const id = user._id;
-        const req1 = await axios.patch(`/user/${id}`,{posts:[...user.posts,req.data.post._id]},{
+        const req1 = await axios.patch(`/user/${id}`,{posts:[...user.posts,{postId:req.data.post._id,share:{initialUserId:user._id}}]},{
             headers:{
                 authorization:`Bearer ${token}`
             }
