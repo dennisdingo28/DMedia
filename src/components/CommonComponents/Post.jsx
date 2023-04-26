@@ -3,7 +3,7 @@ import axios from "axios";
 import Comment from './Comment';
 
 const Post = (props) => {
-  const {token,imageUrl,imageAlt,createdBy,user,title,description,logged,_id,index} = props;
+  const {token,imageUrl,imageAlt,createdBy,user,share,title,description,logged,_id,index} = props;
   const [postActioners,setPostActioners] = useState({
     starUp:false,
     dislike:false,
@@ -26,6 +26,8 @@ const Post = (props) => {
 
   const [commentStatus,setCommentStatus] = useState("");
 
+  const [initialPostUser,setInitialPostUser] = useState({});
+  console.log(initialPostUser);
   const commentInput= useRef();
   const [commentPlaceholder,setCommentPlaceholder] = useState("@comment");
 
@@ -33,6 +35,7 @@ const Post = (props) => {
   useEffect(()=>{
     decodeUserPost();
     getCurrentPost();
+    getInitialPostUser(share.initialUserId);
   },[]);
 
   useEffect(()=>{
@@ -42,6 +45,16 @@ const Post = (props) => {
       })
     }
   },[commentsLoaded])
+
+  async function getInitialPostUser(id){
+    try{
+      const userId=id;
+      const req = await axios.get(`/search/userId/${userId}`);
+      setInitialPostUser(req.data);
+    }catch(err){
+      console.log(err);
+    }
+  }
 
   async function decodeUserComment(commentId,commentText){
     try{
@@ -270,6 +283,7 @@ const Post = (props) => {
               <img src={postUser.profileUrl} className='w-[50px] h-[50px] rounded-full object-cover' alt='profile'/>
               <p>{postUser.username}</p>
              {user._id===createdBy && <span className='text-gray-400'>(you)</span>}
+             <p className='font-bold'>{postUser._id!==share.initialUserId ? `/* shared from ${initialPostUser.username}*/`:""}</p>
             </div>
             <div>
               <i className="bi bi-three-dots cursor-pointer"></i>
