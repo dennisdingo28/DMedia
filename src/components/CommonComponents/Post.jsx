@@ -349,16 +349,18 @@ const Post = (props) => {
                     <small>{numberOfDislikes ? numberOfDislikes.length:"loading..."}</small>
 
                   </div>
-
-                  <div onClick={()=>{setPostActioners(prevState=>{
-                    return {...prevState,share:!prevState.share}
-                  })
-                    sharePost();
+                  {user._id!==createdBy &&           
+                    <div onClick={()=>{setPostActioners(prevState=>{
+                      return {...prevState,share:!prevState.share}
+                    })
+                      sharePost();
+                    }
+                    } className='shareContainer cursor-pointer duration-100 hover:shadow-[0px_0px_5px_#5a29cc] py-1 flex-1 flex flex-col gap-1 items-center active:scale-[.90]'>
+                      {!postActioners.share ? <i className="bi bi-globe"></i>:<i className="bi bi-share-fill text-green-700"></i>}
+                      <p className='text-center'>{!postActioners.share ? "share":"shared"}</p>
+                    </div>
                   }
-                  } className='shareContainer cursor-pointer duration-100 hover:shadow-[0px_0px_5px_#5a29cc] py-1 flex-1 flex flex-col gap-1 items-center active:scale-[.90]'>
-                    {!postActioners.share ? <i className="bi bi-globe"></i>:<i className="bi bi-share-fill text-green-700"></i>}
-                    <p className='text-center'>{!postActioners.share ? "share":"shared"}</p>
-                  </div>
+                  
 
 
                   <div className='commentsContainer cursor-pointer duration-100 hover:shadow-[0px_0px_5px_#5a29cc] py-1 flex-1 flex flex-col gap-1 items-center active:scale-[.90]' onClick={()=>{
@@ -379,7 +381,7 @@ const Post = (props) => {
                   
                 </div>}
 
-                <div className={`commentsSection xx:absolute top-0 ${index%2==0 ? "right-0":"left-0"}`}>
+                <div className={`commentsSection xx:absolute top-0 z-10 ${index%2==0 ? "right-0":"left-0"}`}>
                 <div className="commentsContainer">
                   <div className='commentsHeader mt-3 bg-[#1e1e1e] rounded-sm p-1 cursor-pointer' onClick={()=>{
                     setToggleComments(!toggleComments)
@@ -388,7 +390,7 @@ const Post = (props) => {
                   </div>
                   {toggleComments &&
                     <div>
-                        {commentsUsers.length===0 && <p>It's empty here :/</p>}
+                        {commentsUsers.length===0 && <p className='bg-[#111111] text-center'>It's empty here :/</p>}
 
                       <div className='commentParent max-h-[350px] overflow-y-scroll p-3 flex flex-col gap-3 bg-[#111111]'>
                         {commentsUsers.map((comUser,index)=>{
@@ -396,8 +398,8 @@ const Post = (props) => {
                         })}
                       </div>
 
-                        {logged && <div>
-                          <div className='createCommentContainer flex items-center gap-4 mt-4'>
+                        {logged && <div className='bg-[#1e1e1e] p-2'>
+                          <div className='createCommentContainer flex items-center gap-4'>
                         <input ref={commentInput} type='text' className='w-[100%] outline-none bg-transparent border-b border-gray-500 text-gray-400' placeholder={commentPlaceholder}/>
                         <button onClick={handleComment} className='bg-gray-600 outline-none font-medium font-Karla cursor-pointer px-3 py-1 border-2 border-gray-600 active:border-gray-400 active:scale-90 duration-[.08s]'>Comment</button>
                       </div>
