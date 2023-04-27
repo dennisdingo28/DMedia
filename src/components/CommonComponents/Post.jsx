@@ -10,6 +10,8 @@ const Post = (props) => {
     share:false,
     reported:false
   })
+
+
   const [postUser,setPostUser] = useState({});
 
   const [numberOfLikes,setNumberOfLikes] = useState([]);
@@ -20,6 +22,7 @@ const Post = (props) => {
   const [comments,setComments] = useState([]);
 
   const [clicked,setClicked] = useState(false);//for the async handler for like/dislike
+  const [shareLoaded,setShareLoaded] = useState(false);
   const [loaded,setLoaded] = useState(false);// says if the number of likes/dislikes are loaded
   const [commentsLoaded,setCommentsLoaded] = useState(false);
   const [commentsUsers,setCommentsUsers] = useState([]);
@@ -36,15 +39,37 @@ const Post = (props) => {
     decodeUserPost();
     getCurrentPost();
     getInitialPostUser(share.initialUserId);
+    
+    const currentUserShared = share.sharedBy.filter(sharedUserId=>sharedUserId===user._id);
+
+    if(currentUserShared.length)
+      setPostActioners(prev=>{
+        return {
+          ...prev,
+          share:true
+        }
+      })
   },[]);
 
   useEffect(()=>{
-    if(commentsLoaded){
-      comments.forEach(commentObj=>{
-        decodeUserComment(commentObj.userId,commentObj.commentText);
-      })
+    try{
+      if(commentsLoaded){
+        comments.forEach(commentObj=>{
+          decodeUserComment(commentObj.userId,commentObj.commentText);
+        })
+      }
+    }catch(err){
+      console.log(err);
     }
-  },[commentsLoaded])
+    
+  },[commentsLoaded]);
+
+  useEffect(()=>{
+
+    if(shareLoaded){
+      sharePost();
+    }
+  },[postActioners.share])
 
   async function getInitialPostUser(id){
     try{
@@ -261,20 +286,40 @@ const Post = (props) => {
 
   async function sharePost(){
     try{
-      const req = await axios.post(`/post/sharePost/${_id}`,{user,createdBy},{
-        headers:{
-          authorization:`Bearer ${token}`
-        }
-      });
 
-    
-      console.log(req);
-    }catch(err){
+        if(postActioners.share){
+          const req = await axios.post(`/post/sharePost/${_id}`,{user,createdBy},{
+            headers:{
+              authorization:`Bearer ${token}`
+            }
+          });
+        }else{
+          const req = await axios.patch(`/user/${user._id}`,{posts:user.posts.filter(postID=>postID!==_id)},{
+            headers:{
+              authorization:`Bearer ${token}`
+            }
+          })
+          const req1 = await axios.delete(`/post/delete/${_id}`,{
+            headers:{
+              authorization:`Bearer ${token}`
+            }
+          });
+
+          const req2 = await axios.patch(`/user/${share.initialUserId}`,{share:{initialUserId:share.initialUserId,sharedBy:share.sharedBy.filter(shareId=>shareId!==user._id) || []}},{
+            headers:{
+              authorization:`Bearer ${token}`
+            }
+          });
+        }
+        
+      
+       
+      }catch(err){
       console.log(err);
     }
   }
   return (
-    <div>
+    <div className=''>
       <div className='post'>
         <div className='pHeader'>
           <div className='flex items-center justify-between'>
@@ -284,9 +329,10 @@ const Post = (props) => {
              {user._id===createdBy && <span className='text-gray-400'>(you)</span>}
              <p className='font-bold' >{postUser._id!==share.initialUserId ? `/* shared from ${initialPostUser.username}*/`:""}</p>
             </div>
-            <div>
+            {user._id===postUser._id &&    <div>
               <i className="bi bi-three-dots cursor-pointer"></i>
-            </div>
+            </div>}
+         
           </div>
         </div>
         <div className='pBody'>
@@ -352,7 +398,7 @@ const Post = (props) => {
                     <div onClick={()=>{setPostActioners(prevState=>{
                       return {...prevState,share:!prevState.share}
                     })
-                      sharePost();
+                      setShareLoaded(true);
                     }
                     } className='shareContainer cursor-pointer duration-100 hover:shadow-[0px_0px_5px_#5a29cc] py-1 flex-1 flex flex-col gap-1 items-center active:scale-[.90]'>
                       {!postActioners.share ? <i className="bi bi-globe"></i>:<i className="bi bi-share-fill text-green-700"></i>}

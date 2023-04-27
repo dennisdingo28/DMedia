@@ -96,11 +96,11 @@ const Profile = (props) => {
                     </div>
 
                 </div>
-                <div className='profileContentSide p-3 parent-container flex-1 flex items-center justify-center xx:h-screen max-w-[1350px] mx-auto'>
-                    <div className='profilePostsContainer xx:h-screen mt-5'>
-                        <h2 className='font-bold tracking-wider text-[1.3em]'>{user.username}'s posts</h2>
+                <div className='profileContentSide p-3 parent-container flex-1 flex items-center justify-center xx:h-screen '>
+                    <div className='profilePostsContainer xx:h-screen mt-5 w-[100%] max-w-[1150px] mx-auto'>
+                        <h2 className='font-bold tracking-wider text-[1.3em] text-center'>{user.username}'s posts</h2>
 
-                        <div className='profilePosts mt-10 pb-10 flex flex-col gap-12'>
+                        <div className='profilePosts mt-10 pb-10 flex flex-col gap-20'>
                             {!loaded ? "loading...":
                             
                                 userPosts.map((post,index)=>{
