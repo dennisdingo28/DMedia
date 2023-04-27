@@ -20,6 +20,7 @@ const Profile = (props) => {
     useEffect(()=>{
         getUserPost();
     },[]);
+    console.log('user posts',userPosts);
 
     
     async function getUserPost(){

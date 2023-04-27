@@ -38,28 +38,34 @@ const LoggedHero = (props) => {
     }
 
     async function createPost(){
-        const postData = {
-            ...imageSettings,
-            title:postTitle,
-            description:postDescription,
-            share:{
-                initialUserId:user._id
+        try{
+            const postData = {
+                ...imageSettings,
+                title:postTitle,
+                description:postDescription,
+                share:{
+                    initialUserId:user._id
+                }
             }
+    
+            setFormStatus("Creating your post...");
+            const req = await axios.post("/post/create",postData,{
+                headers:{
+                    authorization:`Bearer ${token}`
+                }
+            });
+            const id = user._id;
+            const req1 = await axios.patch(`/user/${id}`,{posts:[...user.posts,req.data.post._id]},{
+                headers:{
+                    authorization:`Bearer ${token}`
+                }
+            })
+    
+            setFormStatus("Post was successfully created!");
+        }catch(err){
+            setFormStatus(err.message);
         }
-        const req = await axios.post("/post/create",postData,{
-            headers:{
-                authorization:`Bearer ${token}`
-            }
-        });
-        const id = user._id;
-        const req1 = await axios.patch(`/user/${id}`,{posts:[...user.posts,req.data.post._id]},{
-            headers:{
-                authorization:`Bearer ${token}`
-            }
-        })
-
-        setFormStatus("Post was successfully created!");
-        console.log(req1);
+        
     }
 
     function clearInputs(){

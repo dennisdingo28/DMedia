@@ -273,7 +273,6 @@ const Post = (props) => {
       console.log(err);
     }
   }
-
   return (
     <div>
       <div className='post'>
@@ -283,7 +282,7 @@ const Post = (props) => {
               <img src={postUser.profileUrl} className='w-[50px] h-[50px] rounded-full object-cover' alt='profile'/>
               <p>{postUser.username}</p>
              {user._id===createdBy && <span className='text-gray-400'>(you)</span>}
-             <p className='font-bold'>{postUser._id!==share.initialUserId ? `/* shared from ${initialPostUser.username}*/`:""}</p>
+             <p className='font-bold' >{postUser._id!==share.initialUserId ? `/* shared from ${initialPostUser.username}*/`:""}</p>
             </div>
             <div>
               <i className="bi bi-three-dots cursor-pointer"></i>
