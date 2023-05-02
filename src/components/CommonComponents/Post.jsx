@@ -69,7 +69,7 @@ const Post = (props) => {
     if(shareLoaded){
       sharePost();
     }
-  },[postActioners.share])
+  },[postActioners.share,shareLoaded])
 
   async function getInitialPostUser(id){
     try{
@@ -284,6 +284,8 @@ const Post = (props) => {
       }
     }
 
+    const [sharedPostData,setSharedPostData] = useState();
+
   async function sharePost(){
     try{
 
@@ -293,13 +295,15 @@ const Post = (props) => {
               authorization:`Bearer ${token}`
             }
           });
+          console.log('delete',req.data);
+          setSharedPostData(req.data.post._id);
         }else{
-          const req = await axios.patch(`/user/${user._id}`,{posts:user.posts.filter(postID=>postID!==_id)},{
+          const req = await axios.patch(`/user/${user._id}`,{posts:user.posts.filter(postID=>postID!==sharedPostData) || []},{
             headers:{
               authorization:`Bearer ${token}`
             }
           })
-          const req1 = await axios.delete(`/post/delete/${_id}`,{
+          const req1 = await axios.delete(`/post/delete/${sharedPostData}`,{
             headers:{
               authorization:`Bearer ${token}`
             }
