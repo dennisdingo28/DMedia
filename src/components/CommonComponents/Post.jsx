@@ -20,6 +20,7 @@ const Post = (props) => {
   const [defaultDislikes,setDefaultDislikes] = useState([]);
 
   const [comments,setComments] = useState([]);
+  const [sharedPostData,setSharedPostData] = useState({});
 
   const [clicked,setClicked] = useState(false);//for the async handler for like/dislike
   const [shareLoaded,setShareLoaded] = useState(false);
@@ -42,14 +43,33 @@ const Post = (props) => {
     
     const currentUserShared = share.sharedBy.filter(sharedUserId=>sharedUserId===user._id);
 
-    if(currentUserShared.length)
+    if(currentUserShared.length){
       setPostActioners(prev=>{
         return {
           ...prev,
           share:true
         }
       })
+      getSharedPostData();
+
+    }
+    
   },[]);
+
+  async function getSharedPostData(createdBy,initialShareUserId){
+    try{
+      const targetPost = await axios.get(`/post/?createdBy=${createdBy}&initialShareUserId=${initialShareUserId}`,{
+        headers:{
+          authorization:`Bearer ${token}`
+        }
+      });
+      if(targetPost.data.good)
+        setSharedPostData(targetPost.data);
+    }catch(err){
+      console.log(err);
+    }
+  }
+
 
   useEffect(()=>{
     try{
@@ -65,10 +85,16 @@ const Post = (props) => {
   },[commentsLoaded]);
 
   useEffect(()=>{
+   
 
-    if(shareLoaded){
-      sharePost();
-    }
+      if(shareLoaded){
+        if(postActioners.share){
+          sharePost();
+        }else{
+          unsharePost();
+        }
+      }
+    
   },[postActioners.share,shareLoaded])
 
   async function getInitialPostUser(id){
@@ -284,41 +310,41 @@ const Post = (props) => {
       }
     }
 
-    const [sharedPostData,setSharedPostData] = useState();
 
   async function sharePost(){
     try{
-
-        if(postActioners.share){
-          const req = await axios.post(`/post/sharePost/${_id}`,{user,createdBy},{
-            headers:{
-              authorization:`Bearer ${token}`
-            }
-          });
-          console.log('delete',req.data);
-          setSharedPostData(req.data.post._id);
-        }else{
-          const req = await axios.patch(`/user/${user._id}`,{posts:user.posts.filter(postID=>postID!==sharedPostData) || []},{
-            headers:{
-              authorization:`Bearer ${token}`
-            }
-          })
-          const req1 = await axios.delete(`/post/delete/${sharedPostData}`,{
-            headers:{
-              authorization:`Bearer ${token}`
-            }
-          });
-
-          const req2 = await axios.patch(`/user/${share.initialUserId}`,{share:{initialUserId:share.initialUserId,sharedBy:share.sharedBy.filter(shareId=>shareId!==user._id) || []}},{
-            headers:{
-              authorization:`Bearer ${token}`
-            }
-          });
-        }
-        
-      
-       
+        const req = await axios.post(`/post/sharePost/${_id}`,{user,createdBy},{
+          headers:{
+            authorization:`Bearer ${token}`
+          }
+        });
+        console.log('delete',req.data);
+        setSharedPostData(req.data);
       }catch(err){
+      console.log(err);
+    }
+  }
+
+  async function unsharePost(){
+    try{
+      const req = await axios.patch(`/user/${user._id}`,{posts:user.posts.filter(postID=>postID!==sharedPostData.post._id) || []},{
+        headers:{
+          authorization:`Bearer ${token}`
+        }
+      })
+      console.log('for deleting',sharedPostData.post);
+      const req1 = await axios.delete(`/post/delete/${sharedPostData.post._id}`,{
+        headers:{
+          authorization:`Bearer ${token}`
+        }
+      });
+
+      const req2 = await axios.patch(`/post/updatePost/${_id}`,{share:{initialUserId:share.initialUserId,sharedBy:share.sharedBy.filter(shareId=>shareId!==user._id) || []}},{
+        headers:{
+          authorization:`Bearer ${token}`
+        }
+      });
+    }catch(err){
       console.log(err);
     }
   }
@@ -403,6 +429,7 @@ const Post = (props) => {
                       return {...prevState,share:!prevState.share}
                     })
                       setShareLoaded(true);
+
                     }
                     } className='shareContainer cursor-pointer duration-100 hover:shadow-[0px_0px_5px_#5a29cc] py-1 flex-1 flex flex-col gap-1 items-center active:scale-[.90]'>
                       {!postActioners.share ? <i className="bi bi-globe"></i>:<i className="bi bi-share-fill text-green-700"></i>}
@@ -430,7 +457,7 @@ const Post = (props) => {
                   
                 </div>}
 
-                <div className={`commentsSection xx:absolute top-0 z-10 ${index%2==0 ? "right-0":"left-0"}`}>
+                <div className={`commentsSection xx:absolute top-0 z-10 ${index%2===0 ? "right-0":"left-0"}`}>
                 <div className="commentsContainer">
                   <div className='commentsHeader mt-3 bg-[#1e1e1e] rounded-sm p-1 cursor-pointer' onClick={()=>{
                     setToggleComments(!toggleComments)
