@@ -50,19 +50,20 @@ const Post = (props) => {
           share:true
         }
       })
-      getSharedPostData();
+      getSharedPostData(user._id,share.initialUserId);
 
     }
     
   },[]);
 
-  async function getSharedPostData(createdBy,initialShareUserId){
+  async function getSharedPostData(userId,initialUserId){
     try{
-      const targetPost = await axios.get(`/post/?createdBy=${createdBy}&initialShareUserId=${initialShareUserId}`,{
+      const targetPost = await axios.get(`/post/?userId=${userId}&initialUserId=${initialUserId}`,{
         headers:{
           authorization:`Bearer ${token}`
         }
       });
+      console.log('target post',targetPost);
       if(targetPost.data.good)
         setSharedPostData(targetPost.data);
     }catch(err){
@@ -318,8 +319,7 @@ const Post = (props) => {
             authorization:`Bearer ${token}`
           }
         });
-        console.log('delete',req.data);
-        setSharedPostData(req.data);
+
       }catch(err){
       console.log(err);
     }
@@ -327,12 +327,13 @@ const Post = (props) => {
 
   async function unsharePost(){
     try{
+      console.log('for deleting',sharedPostData.post);
+
       const req = await axios.patch(`/user/${user._id}`,{posts:user.posts.filter(postID=>postID!==sharedPostData.post._id) || []},{
         headers:{
           authorization:`Bearer ${token}`
         }
       })
-      console.log('for deleting',sharedPostData.post);
       const req1 = await axios.delete(`/post/delete/${sharedPostData.post._id}`,{
         headers:{
           authorization:`Bearer ${token}`
@@ -357,7 +358,7 @@ const Post = (props) => {
               <img src={postUser.profileUrl} className='w-[50px] h-[50px] rounded-full object-cover' alt='profile'/>
               <p>{postUser.username}</p>
              {user._id===createdBy && <span className='text-gray-400'>(you)</span>}
-             <p className='font-bold' >{postUser._id!==share.initialUserId ? `/* shared from ${initialPostUser.username}*/`:""}</p>
+             <p className='font-bold' >{postUser._id!==share.initialUserId ? `/* shared from ${initialPostUser.username} */`:""}</p>
             </div>
             {user._id===postUser._id &&    <div>
               <i className="bi bi-three-dots cursor-pointer"></i>
