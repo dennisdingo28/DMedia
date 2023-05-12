@@ -9,6 +9,7 @@ const LoggedHero = (props) => {
   const {user,setUser,logged,setLogged,token}=props;
   const [fileStatus,setFileStatus] = useState("")
     const [formStatus,setFormStatus] = useState("");
+    const [uploadDelay,setUploadDelay]=useState(false);
     
     const [validImage,setValidImage] = useState(true);
 
@@ -25,6 +26,8 @@ const LoggedHero = (props) => {
     const [imageSrc,setImageSrc] = useState(defaultProfile);
 
     function validateInputs(){
+        setUploadDelay(true);
+
         if(postTitle.trim()==='' || !validImage)
         {   
             if(postTitle.trim()==='')
@@ -35,6 +38,7 @@ const LoggedHero = (props) => {
             createPost();
         }
         setTimeout(clearInputs,2500);
+        
     }
 
     async function createPost(){
@@ -94,7 +98,7 @@ const LoggedHero = (props) => {
                         <div className='w-[100%] flex items-center'>
                             <input onChange={(e)=>{setPostTitle(e.target.value)
                             }} value={postTitle} autoFocus type='text' placeholder="What's new?" className='text-[#9ca3af] focus:border-b-2 font-Karla w-[100%] bg-transparent outline-none border-b border-darkViolet'/>
-                            <i onClick={validateInputs} className="bi bi-plus-circle-fill cursor-pointer text-[#9ca3af] duration-100 hover:text-[#83878c]"></i>
+                            <i  onClick={!uploadDelay ? validateInputs:()=>{}} className={`bi bi-plus-circle-fill ${!uploadDelay && "cursor-pointer"} text-[#9ca3af] duration-100 hover:text-[#83878c] ${uploadDelay && "text-[#656568]"}`}></i>
                         </div>
                     </div>
                     <p className='font-medium font-Noto'>{formStatus}</p>

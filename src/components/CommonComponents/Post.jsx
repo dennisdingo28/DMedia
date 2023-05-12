@@ -87,7 +87,6 @@ const Post = (props) => {
 
   useEffect(()=>{
    
-
       if(shareLoaded){
         if(postActioners.share){
           sharePost();
@@ -319,6 +318,8 @@ const Post = (props) => {
             authorization:`Bearer ${token}`
           }
         });
+        if(req.data.good)
+        setSharedPostData(req.data);
 
       }catch(err){
       console.log(err);
