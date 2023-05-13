@@ -83,7 +83,7 @@ const Post = (props) => {
       console.log(err);
     }
     
-  },[commentsLoaded]);
+  },[commentsLoaded,comments]);
 
   useEffect(()=>{
    
