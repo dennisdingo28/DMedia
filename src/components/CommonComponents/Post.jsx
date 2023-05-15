@@ -35,6 +35,7 @@ const Post = (props) => {
   const commentInput= useRef();
   const [commentPlaceholder,setCommentPlaceholder] = useState("@comment");
 
+  const [postModal,setPostModal] = useState(false);
 
   useEffect(()=>{
     decodeUserPost();
@@ -356,6 +357,21 @@ const Post = (props) => {
       console.log(err);
     }
   }
+  
+  function togglePostOptionsModal(){
+    setPostModal(!postModal);
+  }
+  async function deletePost(id){
+    try{
+      const req = await axios.delete(`/post/delete/${id}`,{
+        headers:{
+          Authorization:`Bearer ${token}`
+        }
+      })
+    }catch(err){
+      console.log(err);
+    }
+  }
   return (
     <div className=''>
       <div className='post'>
@@ -367,8 +383,14 @@ const Post = (props) => {
              {user._id===createdBy && <span className='text-gray-400'>(you)</span>}
              <p className='font-bold' >{postUser._id!==share.initialUserId ? `/* shared from ${initialPostUser.username} */`:""}</p>
             </div>
-            {user._id===postUser._id &&    <div>
-              <i className="bi bi-three-dots cursor-pointer"></i>
+            {user._id===postUser._id &&    <div className='flex flex-col items-center justify-center'>
+              <i onClick={togglePostOptionsModal} className="bi bi-three-dots cursor-pointer"></i>
+              {
+                postModal && 
+                <div className='bg-[#1e1e1e] cursor-pointer rounded-sm hover:bg-[#1b1a1a]'>
+                  <p className='p-2 text-red-500' onClick={()=>deletePost(_id)}>delete post</p>
+                </div>
+              }
             </div>}
          
           </div>
