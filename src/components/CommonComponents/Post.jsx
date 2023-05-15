@@ -41,6 +41,10 @@ const Post = (props) => {
     getCurrentPost();
     getInitialPostUser(share.initialUserId);
     
+    
+    
+  },[]);
+  useEffect(()=>{
     const currentUserShared = share.sharedBy.filter(sharedUserId=>sharedUserId===user._id);
 
     if(currentUserShared.length){
@@ -53,8 +57,7 @@ const Post = (props) => {
       getSharedPostData(user._id,share.initialUserId);
 
     }
-    
-  },[]);
+  },[user,share])
 
   async function getSharedPostData(userId,initialUserId){
     try{
@@ -179,14 +182,14 @@ const Post = (props) => {
   }
 
   function checkUserLike(){
-    const filtered = numberOfLikes.filter(postId=>postId===user._id);
+    const filtered = numberOfLikes?.filter(postId=>postId===user._id) || [];
     if(filtered.length!==0)
       return true;
     return false;
   }
 
   function checkUserDislike(){
-    const filtered = numberOfDislikes.filter(postId=>postId===user._id);
+    const filtered = numberOfDislikes?.filter(postId=>postId===user._id) || [];
     if(filtered.length!==0)
       return true;
     return false;
@@ -320,6 +323,7 @@ const Post = (props) => {
         });
         if(req.data.good)
         setSharedPostData(req.data);
+        window.location.reload();
 
       }catch(err){
       console.log(err);
@@ -346,6 +350,8 @@ const Post = (props) => {
           authorization:`Bearer ${token}`
         }
       });
+      window.location.reload();
+
     }catch(err){
       console.log(err);
     }
