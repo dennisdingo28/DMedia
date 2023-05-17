@@ -23,7 +23,6 @@ const Hero = (props) => {
     useEffect(()=>{
         getAllPosts();
     },[]);
-
     return (
         <div>
             <div className='parent-container'>

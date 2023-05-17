@@ -35,14 +35,16 @@ const Post = (props) => {
   const commentInput= useRef();
   const [commentPlaceholder,setCommentPlaceholder] = useState("@comment");
 
+  const [postModal,setPostModal] = useState(false);
 
   useEffect(()=>{
     decodeUserPost();
     getCurrentPost();
     getInitialPostUser(share.initialUserId);
     
+    
+    
   },[]);
-
   useEffect(()=>{
     const currentUserShared = share.sharedBy.filter(sharedUserId=>sharedUserId===user._id);
     console.log('current user shared',currentUserShared);
@@ -56,8 +58,7 @@ const Post = (props) => {
       getSharedPostData(user._id,share.initialUserId);
 
     }
-  },[user])
-
+  },[user,share])
 
   async function getSharedPostData(userId,initialUserId){
     try{
@@ -182,14 +183,14 @@ const Post = (props) => {
   }
 
   function checkUserLike(){
-    const filtered = numberOfLikes.filter(postId=>postId===user._id);
+    const filtered = numberOfLikes?.filter(postId=>postId===user._id) || [];
     if(filtered.length!==0)
       return true;
     return false;
   }
 
   function checkUserDislike(){
-    const filtered = numberOfDislikes.filter(postId=>postId===user._id);
+    const filtered = numberOfDislikes?.filter(postId=>postId===user._id) || [];
     if(filtered.length!==0)
       return true;
     return false;
@@ -323,6 +324,7 @@ const Post = (props) => {
         });
         if(req.data.good)
         setSharedPostData(req.data);
+        window.location.reload();
 
       }catch(err){
       console.log(err);
@@ -365,14 +367,23 @@ const Post = (props) => {
           authorization:`Bearer ${token}`
         }
       });
-    }/*
-    else{
-      const req2 = await axios.patch(`/post/updatePost/${sharedPostData.post._id}`,{share:{initialUserId:user._id,sharedBy:share.sharedBy.filter(shareId=>shareId!==user._id) || []}},{
+      window.location.reload();
+
+    }catch(err){
+      console.log(err);
+    }
+  }
+  
+  function togglePostOptionsModal(){
+    setPostModal(!postModal);
+  }
+  async function deletePost(id){
+    try{
+      const req = await axios.delete(`/post/delete/${id}`,{
         headers:{
-          authorization:`Bearer ${token}`
+          Authorization:`Bearer ${token}`
         }
-      });
-    }*/
+      })
     }catch(err){
       console.log(err);
     }
@@ -388,8 +399,14 @@ const Post = (props) => {
              {user._id===createdBy && <span className='text-gray-400'>(you)</span>}
              <p className='font-bold' >{postUser._id!==share.initialUserId ? `/* shared from ${initialPostUser.username} */`:""}</p>
             </div>
-            {user._id===postUser._id &&    <div>
-              <i className="bi bi-three-dots cursor-pointer"></i>
+            {user._id===postUser._id &&    <div className='flex flex-col items-center justify-center'>
+              <i onClick={togglePostOptionsModal} className="bi bi-three-dots cursor-pointer"></i>
+              {
+                postModal && 
+                <div className='bg-[#1e1e1e] cursor-pointer rounded-sm hover:bg-[#1b1a1a]'>
+                  <p className='p-2 text-red-500' onClick={()=>deletePost(_id)}>delete post</p>
+                </div>
+              }
             </div>}
          
           </div>
