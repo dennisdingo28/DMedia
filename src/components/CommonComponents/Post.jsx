@@ -55,7 +55,7 @@ const Post = (props) => {
           share:true
         }
       })
-      getSharedPostData(user._id,share.initialUserId);
+      getSharedPostData(user._id,createdBy);
 
     }
   },[user,share])
@@ -361,7 +361,7 @@ const Post = (props) => {
           }
         });
       }
-      if(!onProfile){
+      
       const req2 = await axios.patch(`/post/updatePost/${_id}`,{share:{initialUserId:share.initialUserId,sharedBy:share.sharedBy.filter(shareId=>shareId!==user._id) || []}},{
         headers:{
           authorization:`Bearer ${token}`
@@ -369,7 +369,8 @@ const Post = (props) => {
       });
       window.location.reload();
 
-    }catch(err){
+    }
+    catch(err){
       console.log(err);
     }
   }
@@ -399,8 +400,8 @@ const Post = (props) => {
              {user._id===createdBy && <span className='text-gray-400'>(you)</span>}
              <p className='font-bold' >{postUser._id!==share.initialUserId ? `/* shared from ${initialPostUser.username} */`:""}</p>
             </div>
-            {user._id===postUser._id &&    <div className='flex flex-col items-center justify-center'>
-              <i onClick={togglePostOptionsModal} className="bi bi-three-dots cursor-pointer"></i>
+            {user._id===postUser._id && <div className='flex flex-col items-center justify-center'>
+              {postUser._id===share.initialUserId && <i onClick={togglePostOptionsModal} className="bi bi-three-dots cursor-pointer"></i>}
               {
                 postModal && 
                 <div className='bg-[#1e1e1e] cursor-pointer rounded-sm hover:bg-[#1b1a1a]'>
@@ -470,7 +471,7 @@ const Post = (props) => {
                     <small>{numberOfDislikes ? numberOfDislikes.length:"loading..."}</small>
 
                   </div>
-                  {user._id!==share.initialUserId &&           
+                  {postActioners.share &&           
                     <div onClick={()=>{setPostActioners(prevState=>{
                       return {...prevState,share:!prevState.share}
                     })
