@@ -3,7 +3,7 @@ import axios from "axios";
 import Comment from './Comment';
 
 const Post = (props) => {
-  const {token,imageUrl,imageAlt,createdBy,user,share,title,description,logged,_id,index} = props;
+  const {token,imageUrl,imageAlt,createdBy,user,share,title,description,logged,_id,index,onProfile} = props;
   const [postActioners,setPostActioners] = useState({
     starUp:false,
     dislike:false,
@@ -41,8 +41,11 @@ const Post = (props) => {
     getCurrentPost();
     getInitialPostUser(share.initialUserId);
     
-    const currentUserShared = share.sharedBy.filter(sharedUserId=>sharedUserId===user._id);
+  },[]);
 
+  useEffect(()=>{
+    const currentUserShared = share.sharedBy.filter(sharedUserId=>sharedUserId===user._id);
+    console.log('current user shared',currentUserShared);
     if(currentUserShared.length){
       setPostActioners(prev=>{
         return {
@@ -53,8 +56,8 @@ const Post = (props) => {
       getSharedPostData(user._id,share.initialUserId);
 
     }
-    
-  },[]);
+  },[user])
+
 
   async function getSharedPostData(userId,initialUserId){
     try{
@@ -329,23 +332,47 @@ const Post = (props) => {
   async function unsharePost(){
     try{
       console.log('for deleting',sharedPostData.post);
-
-      const req = await axios.patch(`/user/${user._id}`,{posts:user.posts.filter(postID=>postID!==sharedPostData.post._id) || []},{
-        headers:{
-          authorization:`Bearer ${token}`
-        }
-      })
-      const req1 = await axios.delete(`/post/delete/${sharedPostData.post._id}`,{
-        headers:{
-          authorization:`Bearer ${token}`
-        }
-      });
-
+      if(!onProfile){
+        const req = await axios.patch(`/user/${user._id}`,{posts:user.posts.filter(postID=>postID!==sharedPostData.post._id) || []},{
+          headers:{
+            authorization:`Bearer ${token}`
+          }
+        })
+      }
+      else{
+        const req = await axios.patch(`/user/${user._id}`,{posts:user.posts.filter(postID=>postID!==_id) || []},{
+          headers:{
+            authorization:`Bearer ${token}`
+          }
+        })
+      }
+      if(!onProfile){
+        const req1 = await axios.delete(`/post/delete/${sharedPostData.post._id}`,{
+          headers:{
+            authorization:`Bearer ${token}`
+          }
+        });
+      }else{
+        const req1 = await axios.delete(`/post/delete/${_id}`,{
+          headers:{
+            authorization:`Bearer ${token}`
+          }
+        });
+      }
+      if(!onProfile){
       const req2 = await axios.patch(`/post/updatePost/${_id}`,{share:{initialUserId:share.initialUserId,sharedBy:share.sharedBy.filter(shareId=>shareId!==user._id) || []}},{
         headers:{
           authorization:`Bearer ${token}`
         }
       });
+    }/*
+    else{
+      const req2 = await axios.patch(`/post/updatePost/${sharedPostData.post._id}`,{share:{initialUserId:user._id,sharedBy:share.sharedBy.filter(shareId=>shareId!==user._id) || []}},{
+        headers:{
+          authorization:`Bearer ${token}`
+        }
+      });
+    }*/
     }catch(err){
       console.log(err);
     }
@@ -426,7 +453,7 @@ const Post = (props) => {
                     <small>{numberOfDislikes ? numberOfDislikes.length:"loading..."}</small>
 
                   </div>
-                  {user._id!==createdBy &&           
+                  {user._id!==share.initialUserId &&           
                     <div onClick={()=>{setPostActioners(prevState=>{
                       return {...prevState,share:!prevState.share}
                     })

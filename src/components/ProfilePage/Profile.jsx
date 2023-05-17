@@ -104,7 +104,7 @@ const Profile = (props) => {
                             {!loaded ? "loading...":
                             
                                 userPosts.map((post,index)=>{
-                                    return <Post token={token} user={user} key={post._id} {...post} logged={logged} index={index}/>
+                                    return <Post token={token} onProfile={true} user={user} key={post._id} {...post} logged={logged} index={index}/>
                                 })
                             }
                         </div>
