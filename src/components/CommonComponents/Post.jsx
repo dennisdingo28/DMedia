@@ -87,7 +87,7 @@ const Post = (props) => {
       console.log(err);
     }
     
-  },[commentsLoaded,comments]);
+  },[commentsLoaded]);
 
   useEffect(()=>{
    
@@ -471,7 +471,7 @@ const Post = (props) => {
                     <small>{numberOfDislikes ? numberOfDislikes.length:"loading..."}</small>
 
                   </div>
-                  {postActioners.share &&           
+                  {user._id!==createdBy &&           
                     <div onClick={()=>{setPostActioners(prevState=>{
                       return {...prevState,share:!prevState.share}
                     })
