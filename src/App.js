@@ -39,9 +39,10 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Home user={user} setUser={setUser} logged={logged} setLogged={setLogged} token={token}/>}/>
+        <Route path="/" element={<Home user={user} setUser={setUser} loggedUser={user} logged={logged} setLogged={setLogged} token={token}/>}/>
         <Route path="/auth" element={<Authenticate setToken={setToken}/>}/>
-        {logged && <Route path='/myProfile' element={<Profile user={user} setUser={setUser} logged={logged} setLogged={setLogged} token={token}/>}/>}
+        {logged && <Route path='/myProfile' element={<Profile user={user} loggedUser={user} setUser={setUser} logged={logged} setLogged={setLogged} token={token}/>}/>}
+        <Route path='/profile/:id' element={<Profile loggedUser={user} logged={logged} token={token}/>}/>
         <Route path="*" element={<NotFoundPage/>}/>
       </Routes>
     </Router>

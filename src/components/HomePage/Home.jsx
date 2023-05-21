@@ -4,12 +4,12 @@ import Hero from './Hero';
 
 const Home = (props) => {
   
-  const {user,setUser,logged,setLogged,token} = props;
+  const {user,setUser,logged,setLogged,token,loggedUser} = props;
 
   return (
     <div className='bg-dark min-h-[100vh] text-white pb-10'>
       <Navbar user={user} setUser={setUser} logged={logged} setLogged={setLogged}/>
-      <Hero user={user} setUser={setUser} logged={logged} setLogged={setLogged} token={token}/>
+      <Hero user={user} setUser={setUser} loggedUser={loggedUser} logged={logged} setLogged={setLogged} token={token}/>
     </div>
   )
 }

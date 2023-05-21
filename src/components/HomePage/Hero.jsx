@@ -5,7 +5,7 @@ import axios from "axios";
 import Post from '../CommonComponents/Post';
 
 const Hero = (props) => {
-    const {logged,user,token} = props;
+    const {logged,user,token,loggedUser} = props;
     
     const [allPosts,setAllPosts] = useState([]);
     console.log(allPosts);
@@ -36,7 +36,7 @@ const Hero = (props) => {
                         <div className='postsContainer flex flex-col gap-10'>
                             {
                                 allPosts.length!==0 ? allPosts.map((post,index)=>{
-                                    return <Post token={token} user={user} key={post._id} {...post} logged={logged} index={index}/>
+                                    return <Post token={token} user={user} loggedUser={loggedUser} key={post._id} {...post} logged={logged} index={index}/>
                                 })
                                 :
                                 <p className='text-center'>No current posts :/</p>

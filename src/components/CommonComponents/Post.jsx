@@ -3,7 +3,7 @@ import axios from "axios";
 import Comment from './Comment';
 
 const Post = (props) => {
-  const {token,imageUrl,imageAlt,createdBy,user,share,title,description,logged,_id,index,onProfile} = props;
+  const {token,imageUrl,imageAlt,createdBy,user,share,title,description,logged,_id,index,onProfile,loggedUser} = props;
   const [postActioners,setPostActioners] = useState({
     starUp:false,
     dislike:false,
@@ -183,14 +183,14 @@ const Post = (props) => {
   }
 
   function checkUserLike(){
-    const filtered = numberOfLikes?.filter(postId=>postId===user._id) || [];
+    const filtered = numberOfLikes?.filter(postId=>postId===loggedUser?._id) || [];
     if(filtered.length!==0)
       return true;
     return false;
   }
 
   function checkUserDislike(){
-    const filtered = numberOfDislikes?.filter(postId=>postId===user._id) || [];
+    const filtered = numberOfDislikes?.filter(postId=>postId===loggedUser?._id) || [];
     if(filtered.length!==0)
       return true;
     return false;
@@ -222,24 +222,24 @@ const Post = (props) => {
     if(!postActioners.starUp){
       if(!postActioners.dislike){
         setNumberOfLikes(prevLikes=>{
-          return [...prevLikes,user._id];
+          return [...prevLikes,loggedUser._id];
         })
 
       }else{
         setNumberOfDislikes(prevDislikes=>{
-          const filteredDislikes = prevDislikes.filter(dislikeId=>dislikeId!==user._id);
+          const filteredDislikes = prevDislikes.filter(dislikeId=>dislikeId!==loggedUser._id);
           return [...filteredDislikes];
         })
       
 
         setNumberOfLikes(prevLikes=>{
-          return [...prevLikes,user._id];
+          return [...prevLikes,loggedUser._id];
         })
 
       }
     }else{
       setNumberOfLikes(prevLikes=>{
-        const filteredLikes = prevLikes.filter(likeId=>likeId!==user._id);
+        const filteredLikes = prevLikes.filter(likeId=>likeId!==loggedUser._id);
         return [...filteredLikes];
       })
     }
@@ -250,20 +250,20 @@ const Post = (props) => {
     if(!postActioners.dislike){
       if(!postActioners.starUp){
         setNumberOfDislikes(prevDislikes=>{
-          return [...prevDislikes,user._id];
+          return [...prevDislikes,loggedUser._id];
         })
       }else{
         setNumberOfLikes(prevLikes=>{
-          const filteredLikes = prevLikes.filter(likeId=>likeId!==user._id);
+          const filteredLikes = prevLikes.filter(likeId=>likeId!==logged._id);
           return [...filteredLikes];
         })
         setNumberOfDislikes(prevDislikes=>{
-          return [...prevDislikes,user._id];
+          return [...prevDislikes,logged._id];
         })
       }
     }else{
       setNumberOfDislikes(prevDislikes=>{
-        const filteredDislikes = prevDislikes.filter(dislikeId=>dislikeId!==user._id);
+        const filteredDislikes = prevDislikes.filter(dislikeId=>dislikeId!==loggedUser._id);
         return [...filteredDislikes];
       })
     }
@@ -279,10 +279,10 @@ const Post = (props) => {
       }else{
         setCommentStatus("Loading...")
         setCommentsUsers(prev=>{
-          return [...prev,{username:user.username,
-            profileImage:user.profileUrl,postDesc:commentInput.current.value,id:user._id}];
+          return [...prev,{username:loggedUser.username,
+            profileImage:loggedUser.profileUrl,postDesc:commentInput.current.value,id:loggedUser._id}];
         })
-        const req = await axios.patch(`/post/updatePost/${_id}`,{comments:[...comments,{userId:user._id,commentText:commentInput.current.value}]},{
+        const req = await axios.patch(`/post/updatePost/${_id}`,{comments:[...comments,{userId:loggedUser._id,commentText:commentInput.current.value}]},{
           headers:{
             authorization:`Bearer ${token}`
           }
@@ -397,11 +397,11 @@ const Post = (props) => {
             <div className='flex items-center gap-2 cursor-pointer'>
               <img src={postUser.profileUrl} className='w-[50px] h-[50px] rounded-full object-cover' alt='profile'/>
               <p>{postUser.username}</p>
-             {user._id===createdBy && <span className='text-gray-400'>(you)</span>}
+             {user?._id===postUser?._id && loggedUser?._id===user?._id && <span className='text-gray-400'>(you)</span>}
              <p className='font-bold' >{postUser._id!==share.initialUserId ? `/* shared from ${initialPostUser.username} */`:""}</p>
             </div>
-            {user._id===postUser._id && <div className='flex flex-col items-center justify-center'>
-              {postUser._id===share.initialUserId && <i onClick={togglePostOptionsModal} className="bi bi-three-dots cursor-pointer"></i>}
+            {user?._id===postUser?._id && user._id===loggedUser?._id && <div className='flex flex-col items-center justify-center'>
+              {postUser?._id===share.initialUserId && <i onClick={togglePostOptionsModal} className="bi bi-three-dots cursor-pointer"></i>}
               {
                 postModal && 
                 <div className='bg-[#1e1e1e] cursor-pointer rounded-sm hover:bg-[#1b1a1a]'>
